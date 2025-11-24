@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ApplicationResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'uuid' => $this->uuid,
+            'customer_id' => $this->customer_id,
+            'vendor_id' => $this->vendor_id,
+            'total_amount' => $this->total_amount,
+            'number_of_installments' => $this->number_of_installments,
+            'interest_rate' => $this->interest_rate,
+            'suggested_total_amount' => $this->suggested_total_amount,
+            'suggested_number_of_installments' => $this->suggested_number_of_installments,
+            'suggested_interest_rate' => $this->suggested_interest_rate,
+            'status' => $this->status,
+            'vendor' => VendorResource::make($this->whenLoaded('vendor')),
+            'customer' => CustomerResource::make($this->whenLoaded('customer')),
+            'installments' => InstallmentResource::collection($this->whenLoaded('installments')),
+            'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
+        ];
+    }
+}

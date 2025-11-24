@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class InstallmentResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'uuid' => $this->uuid,
+            'application_id' => $this->application_id,
+            'installment_number' => $this->installment_number,
+            'amount' => $this->amount,
+            'due_date' => $this->due_date?->toISOString(),
+            'paid_at' => $this->paid_at?->toISOString(),
+            'status' => $this->status,
+            'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
+        ];
+    }
+}
