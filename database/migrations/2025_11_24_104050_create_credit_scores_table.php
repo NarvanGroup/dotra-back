@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('credit_scores', function (Blueprint $table): void {
-            $table->uuid('uuid')->primary();
+            $table->uuid('id')->primary();
             $table->foreignUuid('customer_id');
             $table->uuidMorphs('initiator');
             $table->date('issued_on');
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('customer_id')
-                ->references('uuid')
+                ->references('id')
                 ->on('customers')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

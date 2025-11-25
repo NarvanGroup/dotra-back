@@ -15,14 +15,11 @@ class CreditScore extends Model
     use HasFactory;
     use HasUuids;
 
-    protected $primaryKey = 'uuid';
-
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'uuid',
         'customer_id',
         'initiator_type',
         'initiator_id',
@@ -42,7 +39,7 @@ class CreditScore extends Model
      */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'uuid');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
     /**
@@ -70,7 +67,7 @@ class CreditScore extends Model
         // Create credit score with vendor as initiator
         return $customer->creditScores()->create([
             'initiator_type' => Vendor::class,
-            'initiator_id' => $vendor->uuid,
+            'initiator_id' => $vendor->id,
             'issued_on' => now(),
             'status' => CreditScoreStatus::COMPLETED,
             'overall_score' => $scoreData['final_score'],

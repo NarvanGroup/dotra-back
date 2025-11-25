@@ -12,7 +12,7 @@ class ApplicationPolicy
      */
     public function view(Vendor $vendor, Application $application): bool
     {
-        return $application->vendor_id === $vendor->uuid;
+        return $application->vendor_id === $vendor->id;
     }
 
     /**
@@ -20,7 +20,7 @@ class ApplicationPolicy
      */
     public function update(Vendor $vendor, Application $application): bool
     {
-        return $application->vendor_id === $vendor->uuid;
+        return $application->vendor_id === $vendor->id;
     }
 
     /**
@@ -28,6 +28,6 @@ class ApplicationPolicy
      */
     public function delete(Vendor $vendor, Application $application): bool
     {
-        return $application->vendor_id === $vendor->uuid;
+        return $application->vendor_id === $vendor->id;
     }
 }

@@ -23,8 +23,8 @@ Route::prefix('v1')->group(function (): void {
 
             Route::get('applications', [ApplicationController::class, 'index'])->name('vendors.applications.index');
             Route::post('applications', [ApplicationController::class, 'store'])->name('vendors.applications.store');
-            Route::get('applications/{application:uuid}/edit', [ApplicationController::class, 'edit'])->name('vendors.applications.edit');
-            Route::match(['put', 'patch'], 'applications/{application:uuid}', [ApplicationController::class, 'update'])
+            Route::get('applications/{application:id}/edit', [ApplicationController::class, 'edit'])->name('vendors.applications.edit');
+            Route::match(['put', 'patch'], 'applications/{application:id}', [ApplicationController::class, 'update'])
                 ->name('vendors.applications.update');
 
         });

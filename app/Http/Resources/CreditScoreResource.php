@@ -15,7 +15,7 @@ class CreditScoreResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'id' => $this->id,
             'customer_id' => $this->customer_id,
             'issued_on' => $this->issued_on?->toISOString(),
             'status' => $this->status?->value ?? $this->status,

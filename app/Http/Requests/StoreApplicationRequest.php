@@ -24,14 +24,14 @@ class StoreApplicationRequest extends FormRequest
             'customer_id' => [
                 'required',
                 'uuid',
-                Rule::exists('customers', 'uuid'),
+                Rule::exists('customers', 'id'),
                 Rule::exists('customer_vendor', 'customer_id')
-                    ->where(fn($query) => $query->where('vendor_id', $vendor?->uuid))
+                    ->where(fn($query) => $query->where('vendor_id', $vendor?->id))
             ],
             'credit_score_id' => [
                 'required',
                 'uuid',
-                Rule::exists('credit_scores', 'uuid')
+                Rule::exists('credit_scores', 'id')
                     ->where(fn($query) => $query->where('customer_id', $this->input('customer_id')))
             ],
         ];

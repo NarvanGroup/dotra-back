@@ -20,7 +20,7 @@ class UpdateApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => ['sometimes', 'uuid', 'exists:customers,uuid'],
+            'customer_id' => ['sometimes', 'uuid', 'exists:customers,id'],
             'credit_score_id' => ['prohibited'],
             'total_amount' => ['sometimes', 'integer', 'min:1'],
             'number_of_installments' => ['sometimes', 'integer', 'between:1,32767'],

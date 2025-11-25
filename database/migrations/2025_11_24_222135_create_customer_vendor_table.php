@@ -18,11 +18,11 @@ return new class extends Migration
 
             $table->primary(['customer_id', 'vendor_id']);
             $table->foreign('customer_id')
-                ->references('uuid')
+                ->references('id')
                 ->on('customers')
                 ->onDelete('cascade');
             $table->foreign('vendor_id')
-                ->references('uuid')
+                ->references('id')
                 ->on('vendors')
                 ->onDelete('cascade');
 

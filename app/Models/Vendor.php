@@ -18,14 +18,11 @@ class Vendor extends Model
     use HasFactory;
     use HasUuids;
 
-    protected $primaryKey = 'uuid';
-
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'uuid',
         'name',
         'mobile',
         'slug',
@@ -51,7 +48,7 @@ class Vendor extends Model
 
     public function applications(): HasMany
     {
-        return $this->hasMany(Application::class, 'vendor_id', 'uuid');
+        return $this->hasMany(Application::class, 'vendor_id', 'id');
     }
 
     public function initiatedCreditScores(): MorphMany
@@ -70,8 +67,8 @@ class Vendor extends Model
             Customer::class,
             Application::class,
             'vendor_id', // Foreign key on applications table
-            'uuid', // Foreign key on customers table (primary key)
-            'uuid', // Local key on vendors table (primary key)
+            'id', // Foreign key on customers table (primary key)
+            'id', // Local key on vendors table (primary key)
             'customer_id' // Local key on applications table
         );
 
@@ -79,7 +76,7 @@ class Vendor extends Model
         if ($orderBy === null) {
             $relation->select('customers.*')
                 ->selectRaw('MAX(applications.created_at) as latest_application_date')
-                ->groupBy('customers.uuid', 'applications.vendor_id')
+                ->groupBy('customers.id', 'applications.vendor_id')
                 ->orderByDesc('latest_application_date');
         } else {
             $relation->orderBy($orderBy);
@@ -95,8 +92,8 @@ class Vendor extends Model
             'customer_vendor',
             'vendor_id',
             'customer_id',
-            'uuid',
-            'uuid'
+            'id',
+            'id'
         )->withTimestamps();
     }
 }

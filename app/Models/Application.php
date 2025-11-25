@@ -21,14 +21,11 @@ class Application extends Model
     use HasUuids;
     use SoftDeletes;
 
-    protected $primaryKey = 'uuid';
-
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'uuid',
         'customer_id',
         'vendor_id',
         'credit_score_id',
@@ -50,7 +47,7 @@ class Application extends Model
 
     public function getRouteKeyName(): string
     {
-        return 'uuid';
+        return 'id';
     }
 
     protected static function booted(): void
@@ -106,21 +103,21 @@ class Application extends Model
 
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'uuid');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(Vendor::class, 'vendor_id', 'uuid');
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
     }
 
     public function installments(): HasMany
     {
-        return $this->hasMany(Installment::class, 'application_id', 'uuid');
+        return $this->hasMany(Installment::class, 'application_id', 'id');
     }
 
     public function creditScore(): BelongsTo
     {
-        return $this->belongsTo(CreditScore::class, 'credit_score_id', 'uuid');
+        return $this->belongsTo(CreditScore::class, 'credit_score_id', 'id');
     }
 }

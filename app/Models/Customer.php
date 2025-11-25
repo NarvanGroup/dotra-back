@@ -15,14 +15,11 @@ class Customer extends Model
     use HasFactory;
     use HasUuids;
 
-    protected $primaryKey = 'uuid';
-
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'uuid',
         'national_code',
         'mobile',
         'first_name',
@@ -40,17 +37,17 @@ class Customer extends Model
 
     public function getRouteKeyName(): string
     {
-        return 'uuid';
+        return 'id';
     }
 
     public function applications(): HasMany
     {
-        return $this->hasMany(Application::class, 'customer_id', 'uuid');
+        return $this->hasMany(Application::class, 'customer_id', 'id');
     }
 
     public function creditScores(): HasMany
     {
-        return $this->hasMany(CreditScore::class, 'customer_id', 'uuid');
+        return $this->hasMany(CreditScore::class, 'customer_id', 'id');
     }
 
     public function initiatedCreditScores(): MorphMany
@@ -70,8 +67,8 @@ class Customer extends Model
             'customer_vendor',
             'customer_id',
             'vendor_id',
-            'uuid',
-            'uuid'
+            'id',
+            'id'
         )->withTimestamps();;
     }
 
@@ -87,14 +84,14 @@ class Customer extends Model
         $customer = self::where('national_code', $payload['national_code'])->first();
 
         if ($customer) {
-            $customer->vendors()->syncWithoutDetaching([$vendor->uuid]);
+            $customer->vendors()->syncWithoutDetaching([$vendor->id]);
             
             return [$customer, false];
         }
 
         // @todo fetch customer data from external API instead of user input
         $customer = $vendor->createdCustomers()->create($payload);
-        $customer->vendors()->syncWithoutDetaching([$vendor->uuid]);
+        $customer->vendors()->syncWithoutDetaching([$vendor->id]);
 
         return [$customer, true];
     }

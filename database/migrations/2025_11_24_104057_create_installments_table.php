@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('installments', function (Blueprint $table): void {
-            $table->uuid('uuid')->primary();
+            $table->uuid('id')->primary();
             $table->foreignUuid('application_id')
-                ->constrained('applications', 'uuid')
+                ->constrained('applications', 'id')
                 ->cascadeOnDelete();
             $table->unsignedSmallInteger('installment_number');
             $table->unsignedBigInteger('amount');
