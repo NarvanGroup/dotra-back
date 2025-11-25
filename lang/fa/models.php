@@ -1,0 +1,75 @@
+<?php
+
+return [
+    'applications' => [
+        'label' => 'درخواست‌ها',
+        'statuses' => [
+            'terms-suggested' => 'پیشنهاد ثبت‌شده',
+            'vendor-adjusting' => 'در حال بازبینی فروشنده',
+            'approved' => 'تایید‌شده',
+            'in-repayment' => 'در حال بازپرداخت',
+            'overdue' => 'دارای تاخیر',
+            'repaid' => 'تسویه‌شده',
+        ],
+    ],
+    'customers' => [
+        'label' => 'مشتریان',
+    ],
+    'credit_scores' => [
+        'label' => 'امتیازات اعتباری',
+        'statuses' => [
+            'pending' => 'در انتظار',
+            'processing' => 'در حال پردازش',
+            'completed' => 'تکمیل‌شده',
+            'failed' => 'ناموفق',
+        ],
+    ],
+    'installments' => [
+        'label' => 'اقساط',
+    ],
+    'users' => [
+        'label' => 'کاربران',
+    ],
+    'vendors' => [
+        'label' => 'فروشندگان',
+        'types' => [
+            'individual' => 'حقیقی',
+            'legal' => 'حقوقی',
+        ],
+        'industries' => [
+            'nuts-dried-fruits' => 'آجیل و خشکبار',
+            'cosmetics-hygiene' => 'آرایشی و بهداشتی',
+            'musical-instruments' => 'آلات موسیقی',
+            'education' => 'آموزشی',
+            'tools-equipment' => 'ابزار و تجهیزات',
+            'accommodation-travel-agency' => 'اقامتگاه و آژانس مسافرتی',
+            'accessories-jewelry' => 'اکسسوری و بدلیجات',
+            'pet-shop' => 'پت شاپ',
+            'sportswear' => 'پوشاک ورزشی',
+            'camping-sports-equipment' => 'تجهیزات کمپ و ورزشی',
+            'entertainment-leisure' => 'تفریح و سرگرمی',
+            'domestic-tours' => 'تور داخلی',
+            'services' => 'خدمات',
+            'health-services' => 'خدمات سلامت',
+            'watches-glasses' => 'ساعت و عینک',
+            'handicrafts-artworks' => 'صنایع دستی و آثار هنری',
+            'gold' => 'طلا',
+            'digital-gadgets-accessories' => 'گجت و جانبی دیجیتال',
+            'laptop' => 'لپ‌تاپ',
+            'home-electrical-appliances' => 'لوازم برقی خانه',
+            'home-decorative-items' => 'لوازم دکوراتیو خانه',
+            'non-electric-home-appliances' => 'لوازم غیر برقی خانه',
+            'car-spare-parts-consumables' => 'لوازم یدکی و مصرفی خودرو',
+            'fashion-apparel' => 'مد و پوشاک',
+            'fresh-food' => 'مواد غذایی تازه',
+            'mobile-tablet' => 'موبایل و تبلت',
+            'supplements-medicine-medical-equipment' => 'مکمل، دارویی و تجهیزات پزشکی',
+            'silver' => 'نقره',
+            'personal-electrical-devices' => 'وسایل برقی شخصی',
+            'fmcg' => 'کالاهای تند مصرف',
+            'books-stationery-toys' => 'کتاب و لوازم‌التحریر و اسباب‌بازی',
+            'baby-kids' => 'کودک و نوزاد',
+            'bags-shoes' => 'کیف و کفش',
+        ],
+    ],
+];

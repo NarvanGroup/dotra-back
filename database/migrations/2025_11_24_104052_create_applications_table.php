@@ -19,13 +19,17 @@ return new class extends Migration
             $table->foreignUuid('vendor_id')
                 ->constrained('vendors', 'uuid')
                 ->cascadeOnDelete();
-            $table->unsignedBigInteger('total_amount');
-            $table->unsignedSmallInteger('number_of_installments');
+            $table->foreignUuid('credit_score_id')
+                ->constrained('credit_scores', 'uuid')
+                ->restrictOnDelete();
+            $table->unsignedBigInteger('total_amount')->nullable();
+            $table->unsignedSmallInteger('number_of_installments')->nullable();
             $table->decimal('interest_rate', 5, 2)->nullable();
-            $table->unsignedBigInteger('suggested_total_amount');
-            $table->unsignedSmallInteger('suggested_number_of_installments');
+            $table->unsignedBigInteger('suggested_total_amount')->nullable();
+            $table->unsignedSmallInteger('suggested_number_of_installments')->nullable();
             $table->decimal('suggested_interest_rate', 5, 2)->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('terms-suggested');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -33,6 +33,11 @@ class Installment extends Model
         'paid_at' => 'datetime',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class, 'application_id', 'uuid');
