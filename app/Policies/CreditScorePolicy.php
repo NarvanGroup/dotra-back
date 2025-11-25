@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\CreditScore;
-use App\Models\Vendor;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CreditScorePolicy
@@ -11,72 +11,65 @@ class CreditScorePolicy
     use HandlesAuthorization;
 
     /**
-     * Determine if the vendor can view any credit scores.
+     * Determine if the user can view any credit scores.
      */
-    public function viewAny(Vendor $vendor): bool
+    public function viewAny(User $user): bool
     {
-        // Vendors can view credit scores
+        // Admin users can view all credit scores
         return true;
     }
 
     /**
-     * Determine if the vendor can view the credit score.
+     * Determine if the user can view the credit score.
      */
-    public function view(Vendor $vendor, CreditScore $creditScore): bool
+    public function view(User $user, CreditScore $creditScore): bool
     {
-        // Vendor can view credit score if:
-        // 1. They initiated it
-        // 2. They have an application with this customer
-        if ($creditScore->initiator_type === Vendor::class && $creditScore->initiator_id === $vendor->id) {
-            return true;
-        }
-
-        return $vendor->applications()
-            ->where('customer_id', $creditScore->customer_id)
-            ->exists();
-    }
-
-    /**
-     * Determine if the vendor can create credit scores.
-     */
-    public function create(Vendor $vendor): bool
-    {
-        // Vendors can create credit scores for their customers
+        // Admin users can view any credit score
         return true;
     }
 
     /**
-     * Determine if the vendor can update the credit score.
+     * Determine if the user can create credit scores.
      */
-    public function update(Vendor $vendor, CreditScore $creditScore): bool
+    public function create(User $user): bool
     {
-        // Only the initiator can update the credit score
-        return $creditScore->initiator_type === Vendor::class 
-            && $creditScore->initiator_id === $vendor->id;
+        // Admin users can create credit scores
+        return true;
     }
 
     /**
-     * Determine if the vendor can delete the credit score.
+     * Determine if the user can update the credit score.
      */
-    public function delete(Vendor $vendor, CreditScore $creditScore): bool
+    public function update(User $user, CreditScore $creditScore): bool
     {
-        // Vendors cannot delete credit scores
-        return false;
+        // Admin users can update any credit score
+        return true;
     }
 
     /**
-     * Determine if the vendor can restore the credit score.
+     * Determine if the user can delete the credit score.
      */
-    public function restore(Vendor $vendor, CreditScore $creditScore): bool
+    public function delete(User $user, CreditScore $creditScore): bool
     {
-        return false;
+        // Admin users can delete any credit score
+        return true;
     }
 
     /**
-     * Determine if the vendor can permanently delete the credit score.
+     * Determine if the user can restore the credit score.
      */
-    public function forceDelete(Vendor $vendor, CreditScore $creditScore): bool
+    public function restore(User $user, CreditScore $creditScore): bool
     {
-        return false;
+        // Admin users can restore any credit score
+        return true;
+    }
+
+    /**
+     * Determine if the user can permanently delete the credit score.
+     */
+    public function forceDelete(User $user, CreditScore $creditScore): bool
+    {
+        // Admin users can force delete any credit score
+        return true;
     }
 }

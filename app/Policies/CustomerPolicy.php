@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Customer;
-use App\Models\Vendor;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy
@@ -11,68 +11,65 @@ class CustomerPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine if the vendor can view any customers.
+     * Determine if the user can view any customers.
      */
-    public function viewAny(Vendor $vendor): bool
+    public function viewAny(User $user): bool
     {
-        // Vendors can view their own customers
+        // Admin users can view all customers
         return true;
     }
 
     /**
-     * Determine if the vendor can view the customer.
+     * Determine if the user can view the customer.
      */
-    public function view(Vendor $vendor, Customer $customer): bool
+    public function view(User $user, Customer $customer): bool
     {
-        // Vendor can view customer if they have an application together
-        // or if the vendor created this customer
-        return $vendor->applications()
-            ->where('customer_id', $customer->uuid)
-            ->exists()
-            || ($customer->creator_type === Vendor::class && $customer->creator_id === $vendor->id);
-    }
-
-    /**
-     * Determine if the vendor can create customers.
-     */
-    public function create(Vendor $vendor): bool
-    {
-        // Vendors can create customers
+        // Admin users can view any customer
         return true;
     }
 
     /**
-     * Determine if the vendor can update the customer.
+     * Determine if the user can create customers.
      */
-    public function update(Vendor $vendor, Customer $customer): bool
+    public function create(User $user): bool
     {
-        // Vendor can update customer only if they created them
-        return $customer->creator_type === Vendor::class 
-            && $customer->creator_id === $vendor->id;
+        // Admin users can create customers
+        return true;
     }
 
     /**
-     * Determine if the vendor can delete the customer.
+     * Determine if the user can update the customer.
      */
-    public function delete(Vendor $vendor, Customer $customer): bool
+    public function update(User $user, Customer $customer): bool
     {
-        // Vendors cannot delete customers
-        return false;
+        // Admin users can update any customer
+        return true;
     }
 
     /**
-     * Determine if the vendor can restore the customer.
+     * Determine if the user can delete the customer.
      */
-    public function restore(Vendor $vendor, Customer $customer): bool
+    public function delete(User $user, Customer $customer): bool
     {
-        return false;
+        // Admin users can delete any customer
+        return true;
     }
 
     /**
-     * Determine if the vendor can permanently delete the customer.
+     * Determine if the user can restore the customer.
      */
-    public function forceDelete(Vendor $vendor, Customer $customer): bool
+    public function restore(User $user, Customer $customer): bool
     {
-        return false;
+        // Admin users can restore any customer
+        return true;
+    }
+
+    /**
+     * Determine if the user can permanently delete the customer.
+     */
+    public function forceDelete(User $user, Customer $customer): bool
+    {
+        // Admin users can force delete any customer
+        return true;
     }
 }

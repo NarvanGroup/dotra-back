@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Application;
-use App\Models\Vendor;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ApplicationPolicy
@@ -11,65 +11,65 @@ class ApplicationPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine if the vendor can view any applications.
+     * Determine if the user can view any applications.
      */
-    public function viewAny(Vendor $vendor): bool
+    public function viewAny(User $user): bool
     {
-        // Vendors can view their own applications
+        // Admin users can view all applications
         return true;
     }
 
     /**
-     * Determine if the vendor can view the application.
+     * Determine if the user can view the application.
      */
-    public function view(Vendor $vendor, Application $application): bool
+    public function view(User $user, Application $application): bool
     {
-        // Vendor can only view their own applications
-        return $application->vendor_id === $vendor->id;
-    }
-
-    /**
-     * Determine if the vendor can create applications.
-     */
-    public function create(Vendor $vendor): bool
-    {
-        // Vendors can create applications
+        // Admin users can view any application
         return true;
     }
 
     /**
-     * Determine if the vendor can update the application.
+     * Determine if the user can create applications.
      */
-    public function update(Vendor $vendor, Application $application): bool
+    public function create(User $user): bool
     {
-        // Vendor can only update their own applications
-        return $application->vendor_id === $vendor->id;
+        // Admin users can create applications
+        return true;
     }
 
     /**
-     * Determine if the vendor can delete the application.
+     * Determine if the user can update the application.
      */
-    public function delete(Vendor $vendor, Application $application): bool
+    public function update(User $user, Application $application): bool
     {
-        // Vendor can only delete their own applications
-        return $application->vendor_id === $vendor->id;
+        // Admin users can update any application
+        return true;
     }
 
     /**
-     * Determine if the vendor can restore the application.
+     * Determine if the user can delete the application.
      */
-    public function restore(Vendor $vendor, Application $application): bool
+    public function delete(User $user, Application $application): bool
     {
-        // Vendor can only restore their own applications
-        return $application->vendor_id === $vendor->id;
+        // Admin users can delete any application
+        return true;
     }
 
     /**
-     * Determine if the vendor can permanently delete the application.
+     * Determine if the user can restore the application.
      */
-    public function forceDelete(Vendor $vendor, Application $application): bool
+    public function restore(User $user, Application $application): bool
     {
-        // Vendor can only force delete their own applications
-        return $application->vendor_id === $vendor->id;
+        // Admin users can restore any application
+        return true;
+    }
+
+    /**
+     * Determine if the user can permanently delete the application.
+     */
+    public function forceDelete(User $user, Application $application): bool
+    {
+        // Admin users can force delete any application
+        return true;
     }
 }

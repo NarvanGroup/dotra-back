@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Installment;
-use App\Models\Vendor;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class InstallmentPolicy
@@ -11,65 +11,65 @@ class InstallmentPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine if the vendor can view any installments.
+     * Determine if the user can view any installments.
      */
-    public function viewAny(Vendor $vendor): bool
+    public function viewAny(User $user): bool
     {
-        // Vendors can view installments
+        // Admin users can view all installments
         return true;
     }
 
     /**
-     * Determine if the vendor can view the installment.
+     * Determine if the user can view the installment.
      */
-    public function view(Vendor $vendor, Installment $installment): bool
+    public function view(User $user, Installment $installment): bool
     {
-        // Vendor can view installment if it belongs to their application
-        return $installment->application->vendor_id === $vendor->id;
-    }
-
-    /**
-     * Determine if the vendor can create installments.
-     */
-    public function create(Vendor $vendor): bool
-    {
-        // Vendors can create installments for their applications
+        // Admin users can view any installment
         return true;
     }
 
     /**
-     * Determine if the vendor can update the installment.
+     * Determine if the user can create installments.
      */
-    public function update(Vendor $vendor, Installment $installment): bool
+    public function create(User $user): bool
     {
-        // Vendor can update installment if it belongs to their application
-        return $installment->application->vendor_id === $vendor->id;
+        // Admin users can create installments
+        return true;
     }
 
     /**
-     * Determine if the vendor can delete the installment.
+     * Determine if the user can update the installment.
      */
-    public function delete(Vendor $vendor, Installment $installment): bool
+    public function update(User $user, Installment $installment): bool
     {
-        // Vendor can delete installment if it belongs to their application
-        return $installment->application->vendor_id === $vendor->id;
+        // Admin users can update any installment
+        return true;
     }
 
     /**
-     * Determine if the vendor can restore the installment.
+     * Determine if the user can delete the installment.
      */
-    public function restore(Vendor $vendor, Installment $installment): bool
+    public function delete(User $user, Installment $installment): bool
     {
-        // Vendor can restore installment if it belongs to their application
-        return $installment->application->vendor_id === $vendor->id;
+        // Admin users can delete any installment
+        return true;
     }
 
     /**
-     * Determine if the vendor can permanently delete the installment.
+     * Determine if the user can restore the installment.
      */
-    public function forceDelete(Vendor $vendor, Installment $installment): bool
+    public function restore(User $user, Installment $installment): bool
     {
-        // Vendor can force delete installment if it belongs to their application
-        return $installment->application->vendor_id === $vendor->id;
+        // Admin users can restore any installment
+        return true;
+    }
+
+    /**
+     * Determine if the user can permanently delete the installment.
+     */
+    public function forceDelete(User $user, Installment $installment): bool
+    {
+        // Admin users can force delete any installment
+        return true;
     }
 }
