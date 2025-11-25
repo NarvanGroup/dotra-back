@@ -115,34 +115,6 @@ abstract class BaseAuthenticationController extends Controller
     }
 
     /**
-     * Signup
-     *
-     * @return JsonResponse
-     */
-    public function signup(SignupRequest $request): JsonResponse
-    {
-        $modelClass = $this->getModelClass();
-        
-        if ($modelClass::where('mobile', $request->mobile)->first()) {
-            throw ValidationException::withMessages([
-                'mobile' => ['این شماره موبایل قبلا ثبت نام کرده است'],
-            ]);
-        }
-
-        $user = $modelClass::create([
-            'mobile' => $request->mobile,
-            'national_code' => $request->national_id,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'birth_date' => $request->birth_date,
-        ]);
-
-        $this->authService->generateAndSendOtp($user);
-
-        return $this->responseSuccessful('Signup successful, OTP sent');
-    }
-
-    /**
      * Logout
      *
      * @return JsonResponse

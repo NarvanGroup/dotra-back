@@ -9,17 +9,18 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Middleware\PreventMultipleLogins;
 use Illuminate\Support\Facades\Route;
 
+
+Route::prefix('v1')->group(function (): void {
 Route::get('/process', [VerificationController::class, 'process']);
 
 // Public Routes - Send OTP
 Route::middleware(['throttle:60,60'])->group(function () {
     Route::post('customers/sendOtp', [CustomerAuthenticationController::class, 'sendOtp']);
-    Route::post('customers/signup', [CustomerAuthenticationController::class, 'signup']);
+    Route::post('customers/signup', [CustomerAuthenticationController::class, 'register']);
     Route::post('vendors/sendOtp', [VendorAuthenticationController::class, 'sendOtp']);
-    Route::post('vendors/signup', [VendorAuthenticationController::class, 'signup']);
+    Route::post('vendors/register', [VendorAuthenticationController::class, 'register']);
 });
 
-Route::prefix('v1')->group(function (): void {
 // Customer Authentication Routes
     Route::prefix('customers')->controller(CustomerAuthenticationController::class)->middleware(PreventMultipleLogins::class)->group(function () {
         Route::post('loginOtp', 'loginOtp');
