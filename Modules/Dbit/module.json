@@ -1,0 +1,11 @@
+{
+  "name": "Dbit",
+  "alias": "dbit",
+  "description": "",
+  "keywords": [],
+  "priority": 0,
+  "providers": [
+    "Modules\\Dbit\\App\\Providers\\DbitServiceProvider"
+  ],
+  "files": []
+}

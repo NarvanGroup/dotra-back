@@ -9,11 +9,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends Model
 {
     use HasFactory;
     use HasUuids;
+    use HasApiTokens;
+    use Notifiable;
 
     public $incrementing = false;
 
@@ -29,10 +33,20 @@ class Customer extends Model
         'address',
         'creator_type',
         'creator_id',
+        'otp',
+        'otp_expires_at',
+        'password',
+    ];
+
+    protected $hidden = [
+        'otp',
+        'otp_expires_at',
+        'password',
     ];
 
     protected $casts = [
         'birth_date' => 'datetime',
+        'otp_expires_at' => 'datetime',
     ];
 
     public function getRouteKeyName(): string
@@ -74,7 +88,7 @@ class Customer extends Model
 
     /**
      * Find an existing customer by national code or create a new one for the vendor.
-     * 
+     *
      * @param Vendor $vendor
      * @param array $payload
      * @return array{0: Customer, 1: bool} Returns the customer and whether it was newly created
@@ -85,7 +99,7 @@ class Customer extends Model
 
         if ($customer) {
             $customer->vendors()->syncWithoutDetaching([$vendor->id]);
-            
+
             return [$customer, false];
         }
 
@@ -94,5 +108,13 @@ class Customer extends Model
         $customer->vendors()->syncWithoutDetaching([$vendor->id]);
 
         return [$customer, true];
+    }
+
+    /**
+     * Route notifications for the SMS channel.
+     */
+    public function routeNotificationForSms(): string
+    {
+        return $this->mobile;
     }
 }

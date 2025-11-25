@@ -1,0 +1,30 @@
+{
+  "name": "nwidart/dbit",
+  "description": "",
+  "authors": [
+    {
+      "name": "Nicolas Widart",
+      "email": "n.widart@gmail.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [],
+      "aliases": {
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\Dbit\\": "",
+      "Modules\\Dbit\\App\\": "app/",
+      "Modules\\Dbit\\Database\\Factories\\": "database/factories/",
+      "Modules\\Dbit\\Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Modules\\Dbit\\Tests\\": "tests/"
+    }
+  }
+}

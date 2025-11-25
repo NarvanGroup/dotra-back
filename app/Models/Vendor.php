@@ -12,11 +12,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Vendor extends Model
 {
     use HasFactory;
     use HasUuids;
+    use HasApiTokens;
+    use Notifiable;
+
+    protected $primaryKey = 'uuid';
 
     public $incrementing = false;
 
@@ -34,11 +40,21 @@ class Vendor extends Model
         'industry',
         'phone_number',
         'email',
+        'otp',
+        'otp_expires_at',
+        'password',
+    ];
+
+    protected $hidden = [
+        'otp',
+        'otp_expires_at',
+        'password',
     ];
 
     protected $casts = [
         'type' => VendorType::class,
         'industry' => Industry::class,
+        'otp_expires_at' => 'datetime',
     ];
 
     public function getRouteKeyName(): string
@@ -95,5 +111,13 @@ class Vendor extends Model
             'id',
             'id'
         )->withTimestamps();
+    }
+
+    /**
+     * Route notifications for the SMS channel.
+     */
+    public function routeNotificationForSms(): string
+    {
+        return $this->mobile;
     }
 }
