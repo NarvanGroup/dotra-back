@@ -15,7 +15,7 @@ class InstallmentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'id' => $this->id,
             'application_id' => $this->application_id,
             'installment_number' => $this->installment_number,
             'amount' => $this->amount,

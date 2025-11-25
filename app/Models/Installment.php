@@ -12,14 +12,11 @@ class Installment extends Model
     use HasFactory;
     use HasUuids;
 
-    protected $primaryKey = 'uuid';
-
     public $incrementing = false;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'uuid',
         'application_id',
         'installment_number',
         'amount',
@@ -33,8 +30,13 @@ class Installment extends Model
         'paid_at' => 'datetime',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'id';
+    }
+
     public function application(): BelongsTo
     {
-        return $this->belongsTo(Application::class, 'application_id', 'uuid');
+        return $this->belongsTo(Application::class, 'application_id', 'id');
     }
 }

@@ -2,19 +2,17 @@
 
 namespace App\Models\Vendor;
 
+use App\Enums\Concerns\TranslatableEnum;
+
 enum VendorType: string
 {
+    use TranslatableEnum;
+
     case INDIVIDUAL = 'individual';
     case LEGAL = 'legal';
 
-    /**
-     * Retrieve enum values for validation rules.
-     *
-     * @return array<int, string>
-     */
-    public static function values(): array
+    public static function translationPrefix(): string
     {
-        return array_column(self::cases(), 'value');
+        return 'models.vendors.types';
     }
 }
-

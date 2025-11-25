@@ -1,0 +1,75 @@
+<?php
+
+return [
+    'applications' => [
+        'label' => 'Applications',
+        'statuses' => [
+            'terms-suggested' => 'Terms Suggested',
+            'vendor-adjusting' => 'Vendor Adjusting Terms',
+            'approved' => 'Approved',
+            'in-repayment' => 'In Repayment',
+            'overdue' => 'Overdue',
+            'repaid' => 'Repaid',
+        ],
+    ],
+    'customers' => [
+        'label' => 'Customers',
+    ],
+    'credit_scores' => [
+        'label' => 'Credit Scores',
+        'statuses' => [
+            'pending' => 'Pending',
+            'processing' => 'Processing',
+            'completed' => 'Completed',
+            'failed' => 'Failed',
+        ],
+    ],
+    'installments' => [
+        'label' => 'Installments',
+    ],
+    'users' => [
+        'label' => 'Users',
+    ],
+    'vendors' => [
+        'label' => 'Vendors',
+        'types' => [
+            'individual' => 'Individual',
+            'legal' => 'Legal',
+        ],
+        'industries' => [
+            'nuts-dried-fruits' => 'Nuts & Dried Fruits',
+            'cosmetics-hygiene' => 'Cosmetics & Hygiene',
+            'musical-instruments' => 'Musical Instruments',
+            'education' => 'Education',
+            'tools-equipment' => 'Tools & Equipment',
+            'accommodation-travel-agency' => 'Accommodation & Travel Agency',
+            'accessories-jewelry' => 'Accessories & Jewelry',
+            'pet-shop' => 'Pet Shop',
+            'sportswear' => 'Sportswear',
+            'camping-sports-equipment' => 'Camping & Sports Equipment',
+            'entertainment-leisure' => 'Entertainment & Leisure',
+            'domestic-tours' => 'Domestic Tours',
+            'services' => 'Services',
+            'health-services' => 'Health Services',
+            'watches-glasses' => 'Watches & Glasses',
+            'handicrafts-artworks' => 'Handicrafts & Artworks',
+            'gold' => 'Gold',
+            'digital-gadgets-accessories' => 'Digital Gadgets & Accessories',
+            'laptop' => 'Laptop',
+            'home-electrical-appliances' => 'Home Electrical Appliances',
+            'home-decorative-items' => 'Home Decorative Items',
+            'non-electric-home-appliances' => 'Non-Electric Home Appliances',
+            'car-spare-parts-consumables' => 'Car Spare Parts & Consumables',
+            'fashion-apparel' => 'Fashion & Apparel',
+            'fresh-food' => 'Fresh Food',
+            'mobile-tablet' => 'Mobile Phones & Tablets',
+            'supplements-medicine-medical-equipment' => 'Supplements, Medicine & Medical Equipment',
+            'silver' => 'Silver',
+            'personal-electrical-devices' => 'Personal Electrical Devices',
+            'fmcg' => 'Fast-Moving Consumer Goods (FMCG)',
+            'books-stationery-toys' => 'Books, Stationery & Toys',
+            'baby-kids' => 'Baby & Kids',
+            'bags-shoes' => 'Bags & Shoes',
+        ],
+    ],
+];
