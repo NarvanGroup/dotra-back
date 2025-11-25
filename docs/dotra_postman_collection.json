@@ -1,10 +1,10 @@
 {
   "info": {
     "_postman_id": "d3e7b6c4-1234-5678-9abc-def012345678",
-    "name": "Dotra Vendor API",
-    "description": "Complete API collection for Dotra vendor-facing operations. All endpoints are scoped under a vendor (identified by slug).\n\n## Base URL\n- Local: `http://localhost/api/v1`\n- Production: `https://api.dotra.com/api/v1`\n\n## API Versioning\nAll endpoints are versioned under `/v1`. This is version 1 of the API.\n\n## Authentication\nCurrently authentication middleware is commented out, but endpoints may require authentication in the future.\n\n## Variables\n- `baseUrl`: Base API URL\n- `vendorSlug`: Vendor identifier (e.g., 'dotra', 'tech-corp')\n- `applicationId`: Application ID for testing\n- `customerId`: Customer ID for testing",
+    "name": "Dotra API",
+    "description": "Complete API collection for Dotra platform including authentication and vendor-facing operations.\n\n## Base URL\n- Local: `http://localhost:8000/api`\n- Production: `https://api.dotra.com/api`\n\n## API Versioning\nAll endpoints are versioned under `/v1`. This is version 1 of the API.\n\n## Authentication\nAuthentication uses Laravel Sanctum for token-based auth. Include the Bearer token in the Authorization header for protected endpoints.\n\n## Variables\n- `baseUrl`: Base API URL\n- `authToken`: Bearer token for authenticated requests\n- `vendorSlug`: Vendor identifier (e.g., 'dotra', 'tech-corp')\n- `applicationId`: Application ID for testing\n- `customerId`: Customer ID for testing",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "version": "1.0.0"
+    "version": "2.0.0"
   },
   "variable": [
     {
@@ -12,6 +12,12 @@
       "value": "http://localhost:8000/api",
       "type": "string",
       "description": "Base URL for the API"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string",
+      "description": "Bearer token for authentication"
     },
     {
       "key": "vendorSlug",
@@ -33,6 +39,597 @@
     }
   ],
   "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints for vendors and customers",
+      "item": [
+        {
+          "name": "Vendor",
+          "description": "Vendor authentication endpoints",
+          "item": [
+            {
+              "name": "Register Vendor",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the vendor slug if registration is successful",
+                      "if (pm.response.code === 201) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.vendor && jsonData.vendor.slug) {",
+                      "        pm.collectionVariables.set('vendorSlug', jsonData.vendor.slug);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"فروشگاه نمونه\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"individual\",\n    \"industry\": \"fashion-apparel\",\n    \"email\": \"vendor@example.com\",\n    \"phone_number\": \"02112345678\",\n    \"business_license_code\": \"ABC123456\",\n    \"website_url\": \"https://example-shop.com\",\n    \"reffered_from\": \"google\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "register"
+                  ]
+                },
+                "description": "Register a new vendor account. An OTP will be sent to the provided mobile number for verification.\n\n**Required Fields:**\n- `name` (string): Store/vendor name (Persian characters)\n- `mobile` (string): Mobile number (09XXXXXXXXX format, unique)\n- `national_code` (string): National ID or business ID (10 digits, unique)\n- `type` (string): Vendor type - 'individual' or 'legal'\n- `industry` (string): Business industry category\n\n**Optional Fields:**\n- `email` (string): Email address\n- `phone_number` (string): Landline phone (0XXXXXXXXXX format)\n- `business_license_code` (string): Business license number\n- `website_url` (string): Website URL\n- `reffered_from` (string): Referral source\n\n**Note:** This endpoint is rate-limited to 60 requests per hour."
+              },
+              "response": [
+                {
+                  "name": "Success Response (Created)",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"فروشگاه نمونه\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"individual\",\n    \"industry\": \"fashion-apparel\",\n    \"email\": \"vendor@example.com\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/vendors/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "vendors",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n    \"message\": \"ثبت‌نام با موفقیت انجام شد. کد تایید به شماره موبایل شما ارسال شد\",\n    \"vendor\": {\n        \"id\": \"9c8e6679-7425-40de-944b-e07fc1f90ae7\",\n        \"name\": \"فروشگاه نمونه\",\n        \"mobile\": \"09123456789\",\n        \"slug\": \"frooshgah-nmoneh\",\n        \"type\": \"individual\",\n        \"reffered_from\": \"google\",\n        \"national_code\": \"1234567890\",\n        \"business_license_code\": \"ABC123456\",\n        \"website_url\": \"https://example-shop.com\",\n        \"industry\": \"fashion-apparel\",\n        \"phone_number\": \"02112345678\",\n        \"email\": \"vendor@example.com\",\n        \"created_at\": \"2025-11-25T14:30:00.000000Z\",\n        \"updated_at\": \"2025-11-25T14:30:00.000000Z\"\n    }\n}"
+                },
+                {
+                  "name": "Validation Error",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"Test Store\",\n    \"mobile\": \"123\",\n    \"national_code\": \"12345\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/vendors/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "vendors",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Unprocessable Entity",
+                  "code": 422,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n    \"message\": \"The name may only contain Persian characters. (and 4 more errors)\",\n    \"errors\": {\n        \"name\": [\"نام فروشگاه باید با حروف فارسی باشد\"],\n        \"mobile\": [\"فرمت شماره موبایل نامعتبر است (مثال: 09123456789)\"],\n        \"national_code\": [\"کد ملی/شناسه ملی باید ۱۰ رقم باشد\"],\n        \"type\": [\"نوع فروشنده الزامی است\"],\n        \"industry\": [\"حوزه فعالیت الزامی است\"]\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Send OTP (Vendor)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/sendOtp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "sendOtp"
+                  ]
+                },
+                "description": "Send an OTP code to a registered vendor's mobile number.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n\n**Note:** Rate-limited to 60 requests per hour."
+              },
+              "response": []
+            },
+            {
+              "name": "Login with OTP (Vendor)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the auth token",
+                      "if (pm.response.code === 200) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.token) {",
+                      "        pm.collectionVariables.set('authToken', jsonData.token);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"otp\": \"123456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/loginOtp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "loginOtp"
+                  ]
+                },
+                "description": "Login using OTP verification.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `otp` (string): OTP code received via SMS"
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"mobile\": \"09123456789\",\n    \"otp\": \"123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/vendors/loginOtp",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "vendors",
+                        "loginOtp"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n    \"token\": \"1|abcdefghijklmnopqrstuvwxyz1234567890\",\n    \"vendor\": {\n        \"id\": \"9c8e6679-7425-40de-944b-e07fc1f90ae7\",\n        \"name\": \"فروشگاه نمونه\",\n        \"mobile\": \"09123456789\",\n        \"slug\": \"frooshgah-nmoneh\",\n        \"type\": \"individual\",\n        \"industry\": \"fashion-apparel\",\n        \"email\": \"vendor@example.com\"\n    }\n}"
+                }
+              ]
+            },
+            {
+              "name": "Login with Password (Vendor)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the auth token",
+                      "if (pm.response.code === 200) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.token) {",
+                      "        pm.collectionVariables.set('authToken', jsonData.token);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"password\": \"password123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/loginPassword",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "loginPassword"
+                  ]
+                },
+                "description": "Login using password.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `password` (string): Account password"
+              },
+              "response": []
+            },
+            {
+              "name": "Logout (Vendor)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "logout"
+                  ]
+                },
+                "description": "Logout and revoke the current access token.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Customer",
+          "description": "Customer authentication endpoints",
+          "item": [
+            {
+              "name": "Register Customer",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"national_id\": \"1234567890\",\n    \"first_name\": \"علی\",\n    \"last_name\": \"احمدی\",\n    \"birth_date\": \"1990-05-15\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/signup",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "signup"
+                  ]
+                },
+                "description": "Register a new customer account. An OTP will be sent for verification.\n\n**Required Fields:**\n- `mobile` (string): Mobile number (09XXXXXXXXX format)\n- `national_id` (string): National ID (10 digits)\n- `first_name` (string): First name\n- `last_name` (string): Last name\n- `birth_date` (date): Birth date (YYYY-MM-DD format, must be before today)\n\n**Note:** Rate-limited to 60 requests per hour."
+              },
+              "response": []
+            },
+            {
+              "name": "Send OTP (Customer)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/sendOtp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "sendOtp"
+                  ]
+                },
+                "description": "Send an OTP code to a registered customer's mobile number.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n\n**Note:** Rate-limited to 60 requests per hour."
+              },
+              "response": []
+            },
+            {
+              "name": "Login with OTP (Customer)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the auth token",
+                      "if (pm.response.code === 200) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.token) {",
+                      "        pm.collectionVariables.set('authToken', jsonData.token);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"otp\": \"123456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/loginOtp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "loginOtp"
+                  ]
+                },
+                "description": "Login using OTP verification.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `otp` (string): OTP code received via SMS"
+              },
+              "response": []
+            },
+            {
+              "name": "Login with Password (Customer)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the auth token",
+                      "if (pm.response.code === 200) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.token) {",
+                      "        pm.collectionVariables.set('authToken', jsonData.token);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"password\": \"password123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/loginPassword",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "loginPassword"
+                  ]
+                },
+                "description": "Login using password.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `password` (string): Account password"
+              },
+              "response": []
+            },
+            {
+              "name": "Logout (Customer)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "logout"
+                  ]
+                },
+                "description": "Logout and revoke the current access token.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
     {
       "name": "Applications",
       "description": "Endpoints for managing financing applications",
