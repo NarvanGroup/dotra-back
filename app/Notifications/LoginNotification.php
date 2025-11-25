@@ -36,7 +36,7 @@ class LoginNotification extends Notification
      */
     public function toSms(): array
     {
-        $message = $this->line("« شناس‌بان »")->line("هشدار")->line("ورود به حساب شما در وب سایت شناس‌بان")->line(Jalalian::now()->format('Y-m-d H:i:s'))->line(request()->ip())->cancel();
+        $message = $this->line("« داترا »")->line("هشدار")->line("ورود به حساب شما در وب سایت داترا")->line(Jalalian::now()->format('Y-m-d H:i:s'))->line(request()->ip())->cancel();
         return [
             'message' => $message
         ];

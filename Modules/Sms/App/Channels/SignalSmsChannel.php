@@ -46,10 +46,9 @@ class SignalSmsChannel
                 "message" => $message,
                 "numbers" => [$phoneNumber],
             ]);
-            dd($response->json());
+
         } catch (Exception $e) {
-            dd($e);
-            Log::error('Kavenegar SMS Error: '.$e->getMessage());
+            Log::error('Signal SMS Error: '.$e->getMessage());
         }
     }
 }

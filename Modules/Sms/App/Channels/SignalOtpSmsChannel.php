@@ -53,16 +53,14 @@ class SignalOtpSmsChannel
         try {
             $response = $this->sendRequest('/pattern.json', 'POST', [
                 "from"       => $this->sender,
-                "pattern_id" => "610",
+                "pattern_id" => "1212",
                 "number"     => $phoneNumber,
                 "params"     => [
                     "code" => $message['token']
                 ]
             ]);
-            dd($response->json());
         } catch (Exception $e) {
-            dd($e);
-            Log::error('Kavenegar SMS Error: '.$e->getMessage());
+            Log::error('Signal SMS Error: '.$e->getMessage());
         }
     }
 }

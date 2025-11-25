@@ -5,7 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Channels\DatabaseChannel;
 use Illuminate\Notifications\Notification;
-use Modules\Sms\App\Channels\AmootOtpSmsChannel;
+use Modules\Sms\App\Channels\SignalOtpSmsChannel;
 use Modules\Sms\App\Traits\MessageFormaterTrait;
 
 class OtpNotification extends Notification
@@ -27,7 +27,7 @@ class OtpNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return [DatabaseChannel::class, AmootOtpSmsChannel::class];
+        return [DatabaseChannel::class, SignalOtpSmsChannel::class];
     }
 
     /**
