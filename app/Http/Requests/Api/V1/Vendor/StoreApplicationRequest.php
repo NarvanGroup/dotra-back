@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api\V1\Vendor;
 
-use App\Models\Application;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -21,7 +20,7 @@ class StoreApplicationRequest extends FormRequest
         $vendor = $this->route('vendor');
 
         return [
-            'customer_id' => [
+            'customer_id'     => [
                 'required',
                 'uuid',
                 Rule::exists('customers', 'id'),

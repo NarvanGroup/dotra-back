@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1\Auth;
 
-use App\Http\Requests\Authentication\SignupRequest;
+use App\Http\Requests\Api\V1\Auth\SignupRequest;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Http\JsonResponse;
@@ -41,11 +41,11 @@ class CustomerAuthenticationController extends BaseAuthenticationController
         }
 
         $user = $modelClass::create([
-            'mobile' => $request->mobile,
+            'mobile'        => $request->mobile,
             'national_code' => $request->national_id,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'birth_date' => $request->birth_date,
+            'first_name'    => $request->first_name,
+            'last_name'     => $request->last_name,
+            'birth_date'    => $request->birth_date,
         ]);
 
         $this->authService->generateAndSendOtp($user);

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1\Auth;
 
-use App\Http\Requests\Authentication\OtpLoginRequest;
-use App\Http\Requests\Authentication\OtpRequest;
-use App\Http\Requests\Authentication\PasswordLoginRequest;
-use App\Http\Requests\Authentication\SignupRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\Auth\OtpLoginRequest;
+use App\Http\Requests\Api\V1\Auth\OtpRequest;
+use App\Http\Requests\Api\V1\Auth\PasswordLoginRequest;
 use App\Notifications\LoginNotification;
-use App\Services\AuthenticationService;
+use App\Services\Api\V1\AuthenticationService;
 use App\Traits\ResponderTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

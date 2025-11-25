@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Authentication;
+namespace App\Http\Requests\Api\V1\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OtpLoginRequest extends FormRequest
+class PasswordLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class OtpLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'mobile' => ['required', 'string', 'regex:/^09[0-9]{9}$/'],
-            'otp' => ['required', 'string', 'size:5'],
+            'mobile'   => ['required', 'string', 'regex:/^09[0-9]{9}$/'],
+            'password' => ['required', 'string', 'min:6'],
         ];
     }
 
@@ -35,10 +35,10 @@ class OtpLoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'mobile.required' => 'شماره موبایل الزامی است',
-            'mobile.regex' => 'فرمت شماره موبایل نامعتبر است',
-            'otp.required' => 'کد تایید الزامی است',
-            'otp.size' => 'کد تایید باید 5 رقم باشد',
+            'mobile.required'   => 'شماره موبایل الزامی است',
+            'mobile.regex'      => 'فرمت شماره موبایل نامعتبر است',
+            'password.required' => 'رمز عبور الزامی است',
+            'password.min'      => 'رمز عبور باید حداقل 6 کاراکتر باشد',
         ];
     }
 }

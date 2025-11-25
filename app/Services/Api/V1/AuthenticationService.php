@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Api\V1;
 
 use App\Notifications\OtpNotification;
 use Illuminate\Database\Eloquent\Model;
@@ -22,15 +22,15 @@ class AuthenticationService
     /**
      * Generate and send OTP to user
      *
-     * @param Model $user
+     * @param  Model  $user
      * @return string The generated OTP (for testing purposes)
      */
     public function generateAndSendOtp(Model $user): string
     {
         $otp = random_int(10000, 99999);
-        
+
         $user->update([
-            'otp' => Hash::make($otp),
+            'otp'            => Hash::make($otp),
             'otp_expires_at' => now()->addMinutes(self::OTP_EXPIRATION_MINUTES),
         ]);
 
@@ -42,8 +42,8 @@ class AuthenticationService
     /**
      * Validate OTP for user
      *
-     * @param Model $user
-     * @param string $otp
+     * @param  Model  $user
+     * @param  string  $otp
      * @return bool
      */
     public function validateOtp(Model $user, string $otp): bool
@@ -65,8 +65,8 @@ class AuthenticationService
     /**
      * Validate password for user
      *
-     * @param Model $user
-     * @param string $password
+     * @param  Model  $user
+     * @param  string  $password
      * @return bool
      */
     public function validatePassword(Model $user, string $password): bool
@@ -81,14 +81,14 @@ class AuthenticationService
     /**
      * Create authentication token for user
      *
-     * @param Model $user
-     * @param string $userAgent
+     * @param  Model  $user
+     * @param  string  $userAgent
      * @return string
      */
     public function createToken(Model $user, string $userAgent): string
     {
         $expiresAt = now()->addDays(self::TOKEN_EXPIRATION_DAYS)->toDateTime();
-        
+
         return $user->createToken(
             $userAgent,
             ['*'],
@@ -99,13 +99,13 @@ class AuthenticationService
     /**
      * Clear OTP from user record
      *
-     * @param Model $user
+     * @param  Model  $user
      * @return void
      */
     public function clearOtp(Model $user): void
     {
         $user->update([
-            'otp' => null,
+            'otp'            => null,
             'otp_expires_at' => null,
         ]);
     }

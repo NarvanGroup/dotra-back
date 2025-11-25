@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Authentication;
+namespace App\Http\Requests\Api\V1\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -35,7 +35,7 @@ class OtpRequest extends FormRequest
     {
         return [
             'mobile.required' => 'شماره موبایل الزامی است',
-            'mobile.regex' => 'فرمت شماره موبایل نامعتبر است',
+            'mobile.regex'    => 'فرمت شماره موبایل نامعتبر است',
         ];
     }
 }

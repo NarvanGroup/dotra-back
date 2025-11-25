@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Api\V1;
 
 use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
@@ -32,8 +32,8 @@ class ExternalApiService
             [
                 "mobileNumber" => $mobile,
                 "nationalCode" => $nId,
-                "trackId" => $trackId,
-                "otp" => $otp
+                "trackId"      => $trackId,
+                "otp"          => $otp
             ]);
     }
 
@@ -58,14 +58,14 @@ class ExternalApiService
         $url = 'https://simcart.com/api/v1/simcard-pricing/free-pricing/';
 
         $commonData = [
-            'simcard' => $mobile,
+            'simcard'    => $mobile,
             'sim_status' => 'USED',
         ];
 
         $posData = [...$commonData, 'sim_type' => 'POS'];
         $preData = [...$commonData, 'sim_type' => 'PRE'];
 
-        $responses = Http::pool(static fn (Pool $pool) => [
+        $responses = Http::pool(static fn(Pool $pool) => [
             $pool->as('pos')->asJson()->post($url, $posData),
             $pool->as('pre')->asJson()->post($url, $preData),
         ]);
@@ -95,8 +95,12 @@ class ExternalApiService
     {
         $min = 100000;
         $max = 100000000;
-        if ($number < $min) $number = $min;
-        if ($number > $max) $number = $max;
+        if ($number < $min) {
+            $number = $min;
+        }
+        if ($number > $max) {
+            $number = $max;
+        }
 
         $newMin = 0;
         $newMax = 100;

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Vendor;
-use App\Services\ExternalApiService;
-use Illuminate\Http\Request;
+use App\Services\Api\V1\ExternalApiService;
 use Exception;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class VerificationController extends Controller
@@ -38,8 +39,8 @@ class VerificationController extends Controller
             );
 
             return response()->json([
-                'track_id' => $trackId,
-                'mobile' => $customer->mobile,
+                'track_id'      => $trackId,
+                'mobile'        => $customer->mobile,
                 'national_code' => $customer->national_code,
             ]);
         } catch (Exception $e) {

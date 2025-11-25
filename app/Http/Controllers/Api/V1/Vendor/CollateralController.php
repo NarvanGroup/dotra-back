@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1\Vendor;
 
 use App\Enums\CollateralType;
 use App\Http\Controllers\Controller;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1\Auth;
 
-use App\Http\Requests\Authentication\VendorRegisterRequest;
+use App\Http\Requests\Api\V1\Auth\VendorRegisterRequest;
 use App\Http\Resources\VendorResource;
 use App\Models\Vendor;
 use Illuminate\Http\JsonResponse;
@@ -29,7 +29,7 @@ class VendorAuthenticationController extends BaseAuthenticationController
     /**
      * Register a new vendor
      *
-     * @param VendorRegisterRequest $request
+     * @param  VendorRegisterRequest  $request
      * @return JsonResponse
      */
     public function register(VendorRegisterRequest $request): JsonResponse
@@ -54,26 +54,26 @@ class VendorAuthenticationController extends BaseAuthenticationController
         $counter = 1;
 
         while (Vendor::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
+            $slug = $originalSlug.'-'.$counter;
             $counter++;
         }
 
         // Create the vendor
         $vendor = Vendor::create([
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'slug' => $slug,
-            'national_code' => $request->national_code,
-            'type' => $request->type,
-            'industry' => $request->industry,
-            'owner_first_name' => $request->owner_first_name,
-            'owner_last_name' => $request->owner_last_name,
-            'owner_birth_date' => $request->owner_birth_date,
+            'name'                  => $request->name,
+            'mobile'                => $request->mobile,
+            'slug'                  => $slug,
+            'national_code'         => $request->national_code,
+            'type'                  => $request->type,
+            'industry'              => $request->industry,
+            'owner_first_name'      => $request->owner_first_name,
+            'owner_last_name'       => $request->owner_last_name,
+            'owner_birth_date'      => $request->owner_birth_date,
             'business_license_code' => $request->business_license_code,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'website_url' => $request->website_url,
-            'reffered_from' => $request->reffered_from,
+            'email'                 => $request->email,
+            'phone_number'          => $request->phone_number,
+            'website_url'           => $request->website_url,
+            'reffered_from'         => $request->reffered_from,
         ]);
 
         // Generate and send OTP for verification
@@ -81,7 +81,7 @@ class VendorAuthenticationController extends BaseAuthenticationController
 
         return $this->response([
             'message' => 'ثبت‌نام با موفقیت انجام شد. کد تایید به شماره موبایل شما ارسال شد',
-            'vendor' => VendorResource::make($vendor),
+            'vendor'  => VendorResource::make($vendor),
         ], 201);
     }
 }
