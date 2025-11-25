@@ -22,8 +22,6 @@ class Vendor extends Model
     use HasApiTokens;
     use Notifiable;
 
-    protected $primaryKey = 'uuid';
-
     public $incrementing = false;
 
     protected $keyType = 'string';
