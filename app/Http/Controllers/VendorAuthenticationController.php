@@ -66,9 +66,12 @@ class VendorAuthenticationController extends BaseAuthenticationController
             'national_code' => $request->national_code,
             'type' => $request->type,
             'industry' => $request->industry,
+            'owner_first_name' => $request->owner_first_name,
+            'owner_last_name' => $request->owner_last_name,
+            'owner_birth_date' => $request->owner_birth_date,
+            'business_license_code' => $request->business_license_code,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
-            'business_license_code' => $request->business_license_code,
             'website_url' => $request->website_url,
             'reffered_from' => $request->reffered_from,
         ]);

@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('reffered_from')->nullable();
             $table->string('national_code')->unique();
+            $table->string('owner_first_name')->nullable();
+            $table->string('owner_last_name')->nullable();
+            $table->date('owner_birth_date')->nullable();
             $table->string('business_license_code')->nullable();
             $table->string('website_url')->nullable();
             $table->string('industry')->nullable();

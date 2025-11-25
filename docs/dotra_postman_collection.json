@@ -81,7 +81,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"name\": \"فروشگاه نمونه\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"individual\",\n    \"industry\": \"fashion-apparel\",\n    \"email\": \"vendor@example.com\",\n    \"phone_number\": \"02112345678\",\n    \"business_license_code\": \"ABC123456\",\n    \"website_url\": \"https://example-shop.com\",\n    \"reffered_from\": \"google\"\n}",
+                  "raw": "{\n    \"name\": \"فروشگاه نمونه\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"individual\",\n    \"industry\": \"fashion-apparel\",\n    \"owner_first_name\": \"علی\",\n    \"owner_last_name\": \"احمدی\",\n    \"owner_birth_date\": \"1985-03-15\",\n    \"business_license_code\": \"ABC123456\",\n    \"email\": \"vendor@example.com\",\n    \"phone_number\": \"02112345678\",\n    \"website_url\": \"https://example-shop.com\",\n    \"reffered_from\": \"google\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -99,7 +99,7 @@
                     "register"
                   ]
                 },
-                "description": "Register a new vendor account. An OTP will be sent to the provided mobile number for verification.\n\n**Required Fields:**\n- `name` (string): Store/vendor name (Persian characters)\n- `mobile` (string): Mobile number (09XXXXXXXXX format, unique)\n- `national_code` (string): National ID or business ID (10 digits, unique)\n- `type` (string): Vendor type - 'individual' or 'legal'\n- `industry` (string): Business industry category\n\n**Optional Fields:**\n- `email` (string): Email address\n- `phone_number` (string): Landline phone (0XXXXXXXXXX format)\n- `business_license_code` (string): Business license number\n- `website_url` (string): Website URL\n- `reffered_from` (string): Referral source\n\n**Note:** This endpoint is rate-limited to 60 requests per hour."
+                "description": "Register a new vendor account. An OTP will be sent to the provided mobile number for verification.\n\n**Required Fields (All Types):**\n- `name` (string): Store/vendor name (Persian characters)\n- `mobile` (string): Mobile number (09XXXXXXXXX format, unique)\n- `national_code` (string): National ID or business ID (10 digits, unique)\n- `type` (string): Vendor type - 'individual' or 'legal'\n- `industry` (string): Business industry category\n\n**Required for Individual Vendors Only:**\n- `owner_first_name` (string): Owner's first name (Persian characters)\n- `owner_last_name` (string): Owner's last name (Persian characters)\n- `owner_birth_date` (date): Owner's birth date (YYYY-MM-DD, must be before today)\n- `business_license_code` (string): Business license number\n\n**Prohibited for Legal Vendors:**\n- `business_license_code`: Must NOT be provided for legal vendors\n\n**Optional Fields:**\n- `email` (string): Email address\n- `phone_number` (string): Landline phone (0XXXXXXXXXX format)\n- `website_url` (string): Website URL\n- `reffered_from` (string): Referral source\n\n**Note:** This endpoint is rate-limited to 60 requests per hour."
               },
               "response": [
                 {
@@ -114,7 +114,7 @@
                     ],
                     "body": {
                       "mode": "raw",
-                      "raw": "{\n    \"name\": \"فروشگاه نمونه\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"individual\",\n    \"industry\": \"fashion-apparel\",\n    \"email\": \"vendor@example.com\"\n}"
+                      "raw": "{\n    \"name\": \"فروشگاه نمونه\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"individual\",\n    \"industry\": \"fashion-apparel\",\n    \"owner_first_name\": \"علی\",\n    \"owner_last_name\": \"احمدی\",\n    \"owner_birth_date\": \"1985-03-15\",\n    \"business_license_code\": \"ABC123456\",\n    \"email\": \"vendor@example.com\"\n}"
                     },
                     "url": {
                       "raw": "{{baseUrl}}/v1/vendors/register",
@@ -137,7 +137,7 @@
                       "value": "application/json"
                     }
                   ],
-                  "body": "{\n    \"message\": \"ثبت‌نام با موفقیت انجام شد. کد تایید به شماره موبایل شما ارسال شد\",\n    \"vendor\": {\n        \"id\": \"9c8e6679-7425-40de-944b-e07fc1f90ae7\",\n        \"name\": \"فروشگاه نمونه\",\n        \"mobile\": \"09123456789\",\n        \"slug\": \"frooshgah-nmoneh\",\n        \"type\": \"individual\",\n        \"reffered_from\": \"google\",\n        \"national_code\": \"1234567890\",\n        \"business_license_code\": \"ABC123456\",\n        \"website_url\": \"https://example-shop.com\",\n        \"industry\": \"fashion-apparel\",\n        \"phone_number\": \"02112345678\",\n        \"email\": \"vendor@example.com\",\n        \"created_at\": \"2025-11-25T14:30:00.000000Z\",\n        \"updated_at\": \"2025-11-25T14:30:00.000000Z\"\n    }\n}"
+                  "body": "{\n    \"message\": \"ثبت‌نام با موفقیت انجام شد. کد تایید به شماره موبایل شما ارسال شد\",\n    \"vendor\": {\n        \"id\": \"9c8e6679-7425-40de-944b-e07fc1f90ae7\",\n        \"name\": \"فروشگاه نمونه\",\n        \"mobile\": \"09123456789\",\n        \"slug\": \"frooshgah-nmoneh\",\n        \"type\": \"individual\",\n        \"reffered_from\": \"google\",\n        \"national_code\": \"1234567890\",\n        \"owner_first_name\": \"علی\",\n        \"owner_last_name\": \"احمدی\",\n        \"owner_birth_date\": \"1985-03-15\",\n        \"business_license_code\": \"ABC123456\",\n        \"website_url\": \"https://example-shop.com\",\n        \"industry\": \"fashion-apparel\",\n        \"phone_number\": \"02112345678\",\n        \"email\": \"vendor@example.com\",\n        \"created_at\": \"2025-11-25T14:30:00.000000Z\",\n        \"updated_at\": \"2025-11-25T14:30:00.000000Z\"\n    }\n}"
                 },
                 {
                   "name": "Validation Error",
@@ -174,7 +174,81 @@
                       "value": "application/json"
                     }
                   ],
-                  "body": "{\n    \"message\": \"The name may only contain Persian characters. (and 4 more errors)\",\n    \"errors\": {\n        \"name\": [\"نام فروشگاه باید با حروف فارسی باشد\"],\n        \"mobile\": [\"فرمت شماره موبایل نامعتبر است (مثال: 09123456789)\"],\n        \"national_code\": [\"کد ملی/شناسه ملی باید ۱۰ رقم باشد\"],\n        \"type\": [\"نوع فروشنده الزامی است\"],\n        \"industry\": [\"حوزه فعالیت الزامی است\"]\n    }\n}"
+                  "body": "{\n    \"message\": \"The name may only contain Persian characters. (and 7 more errors)\",\n    \"errors\": {\n        \"name\": [\"نام فروشگاه باید با حروف فارسی باشد\"],\n        \"mobile\": [\"فرمت شماره موبایل نامعتبر است (مثال: 09123456789)\"],\n        \"national_code\": [\"کد ملی/شناسه ملی باید ۱۰ رقم باشد\"],\n        \"type\": [\"نوع فروشنده الزامی است\"],\n        \"industry\": [\"حوزه فعالیت الزامی است\"],\n        \"owner_first_name\": [\"نام مالک برای فروشنده حقیقی الزامی است\"],\n        \"owner_last_name\": [\"نام خانوادگی مالک برای فروشنده حقیقی الزامی است\"],\n        \"owner_birth_date\": [\"تاریخ تولد مالک برای فروشنده حقیقی الزامی است\"]\n    }\n}"
+                },
+                {
+                  "name": "Success Response - Legal Vendor",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"شرکت تجارت الکترونیک\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"legal\",\n    \"industry\": \"digital-gadgets-accessories\",\n    \"email\": \"info@company.com\",\n    \"phone_number\": \"02112345678\",\n    \"website_url\": \"https://company.com\",\n    \"reffered_from\": \"linkedin\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/vendors/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "vendors",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n    \"message\": \"ثبت‌نام با موفقیت انجام شد. کد تایید به شماره موبایل شما ارسال شد\",\n    \"vendor\": {\n        \"id\": \"8c9e6679-7425-40de-944b-e07fc1f90ae8\",\n        \"name\": \"شرکت تجارت الکترونیک\",\n        \"mobile\": \"09123456789\",\n        \"slug\": \"shrkt-tjart-alktrونیک\",\n        \"type\": \"legal\",\n        \"reffered_from\": \"linkedin\",\n        \"national_code\": \"1234567890\",\n        \"owner_first_name\": null,\n        \"owner_last_name\": null,\n        \"owner_birth_date\": null,\n        \"business_license_code\": null,\n        \"website_url\": \"https://company.com\",\n        \"industry\": \"digital-gadgets-accessories\",\n        \"phone_number\": \"02112345678\",\n        \"email\": \"info@company.com\",\n        \"created_at\": \"2025-11-25T14:30:00.000000Z\",\n        \"updated_at\": \"2025-11-25T14:30:00.000000Z\"\n    }\n}"
+                },
+                {
+                  "name": "Validation Error - Legal with Business License",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n    \"name\": \"شرکت تجارت الکترونیک\",\n    \"mobile\": \"09123456789\",\n    \"national_code\": \"1234567890\",\n    \"type\": \"legal\",\n    \"industry\": \"digital-gadgets-accessories\",\n    \"business_license_code\": \"ABC123\"\n}"
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/vendors/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "vendors",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Unprocessable Entity",
+                  "code": 422,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n    \"message\": \"The business license code field is prohibited. (and 0 more errors)\",\n    \"errors\": {\n        \"business_license_code\": [\"کد جواز کسب برای فروشنده حقوقی نباید وارد شود\"]\n    }\n}"
                 }
               ]
             },
