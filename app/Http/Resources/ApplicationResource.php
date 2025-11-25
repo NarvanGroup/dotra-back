@@ -15,19 +15,21 @@ class ApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'uuid' => $this->uuid,
+            'id' => $this->id,
             'customer_id' => $this->customer_id,
             'vendor_id' => $this->vendor_id,
+            'credit_score_id' => $this->credit_score_id,
             'total_amount' => $this->total_amount,
             'number_of_installments' => $this->number_of_installments,
             'interest_rate' => $this->interest_rate,
             'suggested_total_amount' => $this->suggested_total_amount,
             'suggested_number_of_installments' => $this->suggested_number_of_installments,
             'suggested_interest_rate' => $this->suggested_interest_rate,
-            'status' => $this->status,
+            'status' => $this->status?->value ?? $this->status,
             'vendor' => VendorResource::make($this->whenLoaded('vendor')),
             'customer' => CustomerResource::make($this->whenLoaded('customer')),
             'installments' => InstallmentResource::collection($this->whenLoaded('installments')),
+            'credit_score' => CreditScoreResource::make($this->whenLoaded('creditScore')),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];
