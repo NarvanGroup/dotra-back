@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class CreditScoreResource extends Resource
@@ -23,6 +24,12 @@ class CreditScoreResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'Credit Management';
 
     protected static ?int $navigationSort = 5;
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['customer', 'initiator']);
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -171,7 +178,7 @@ class CreditScoreResource extends Resource
                 Tables\Filters\SelectFilter::make('initiator_type')
                     ->label('Initiated By Type')
                     ->options([
-                        'App\\Models\\Vendor'   => 'Vendor',
+                        'App\\Models\\Vendor' => 'Vendor',
                         'App\\Models\\Customer' => 'Customer',
                     ])
                     ->native(false),
@@ -307,10 +314,10 @@ class CreditScoreResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListCreditScores::route('/'),
+            'index' => Pages\ListCreditScores::route('/'),
             'create' => Pages\CreateCreditScore::route('/create'),
-            'view'   => Pages\ViewCreditScore::route('/{record}'),
-            'edit'   => Pages\EditCreditScore::route('/{record}/edit'),
+            'view'  => Pages\ViewCreditScore::route('/{record}'),
+            'edit'  => Pages\EditCreditScore::route('/{record}/edit'),
         ];
     }
 }

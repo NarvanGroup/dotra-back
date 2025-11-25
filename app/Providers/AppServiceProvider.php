@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Application;
+use App\Models\Collateral;
 use App\Models\CreditScore;
 use App\Models\Customer;
 use App\Models\Installment;
 use App\Policies\ApplicationPolicy;
+use App\Policies\CollateralPolicy;
 use App\Policies\CreditScorePolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\InstallmentPolicy;
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Application::class => ApplicationPolicy::class,
         CreditScore::class => CreditScorePolicy::class,
         Installment::class => InstallmentPolicy::class,
+        Collateral::class => CollateralPolicy::class,
     ];
 
     /**

@@ -9,9 +9,18 @@ trait TranslatableEnum
     /**
      * Translate the enum value using its translation prefix and current locale.
      */
-    public function label(): string
+    public function getLabel(): ?string
     {
         return trans($this->translationKey());
+    }
+
+    /**
+     * Translate the enum value using its translation prefix and current locale.
+     * Alias for getLabel for backward compatibility if needed elsewhere.
+     */
+    public function label(): string
+    {
+        return $this->getLabel();
     }
 
     /**

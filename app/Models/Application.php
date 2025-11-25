@@ -120,4 +120,9 @@ class Application extends Model
     {
         return $this->belongsTo(CreditScore::class, 'credit_score_id', 'id');
     }
+
+    public function collaterals(): HasMany
+    {
+        return $this->hasMany(Collateral::class, 'application_id', 'id');
+    }
 }

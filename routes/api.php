@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CollateralController;
 use App\Http\Controllers\CustomerAuthenticationController;
 use App\Http\Controllers\Vendor\ApplicationController;
 use App\Http\Controllers\Vendor\CreditScoreController;
@@ -62,5 +63,6 @@ Route::middleware(['throttle:60,60'])->group(function () {
             Route::get('applications/{application:id}/edit', [ApplicationController::class, 'edit'])->name('vendors.applications.edit');
             Route::match(['put', 'patch'], 'applications/{application:id}', [ApplicationController::class, 'update'])->name('vendors.applications.update');
 
+        Route::apiResource('collaterals', CollateralController::class)->names('vendors.collaterals');
         });
 });

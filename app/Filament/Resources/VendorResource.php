@@ -9,7 +9,6 @@ use App\Models\Vendor\Industry;
 use App\Models\Vendor\VendorType;
 use BackedEnum;
 use Filament\Actions;
-use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -37,7 +36,11 @@ class VendorResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                            ->afterStateUpdated(function (
+                                \Filament\Schemas\Components\Utilities\Get $get,
+                                \Filament\Schemas\Components\Utilities\Set $set,
+                                ?string $state
+                            ) {
                                 if (!$get('slug')) {
                                     $set('slug', Str::slug($state));
                                 }
@@ -326,10 +329,10 @@ class VendorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListVendors::route('/'),
+            'index' => Pages\ListVendors::route('/'),
             'create' => Pages\CreateVendor::route('/create'),
-            'view'   => Pages\ViewVendor::route('/{record}'),
-            'edit'   => Pages\EditVendor::route('/{record}/edit'),
+            'view'  => Pages\ViewVendor::route('/{record}'),
+            'edit'  => Pages\EditVendor::route('/{record}/edit'),
         ];
     }
 }

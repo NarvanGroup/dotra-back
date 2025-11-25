@@ -330,6 +330,7 @@ class ApplicationResource extends Resource
     {
         return [
             RelationManagers\InstallmentsRelationManager::class,
+            RelationManagers\CollateralsRelationManager::class,
         ];
     }
 

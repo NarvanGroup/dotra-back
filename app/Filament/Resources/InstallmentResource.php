@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
 class InstallmentResource extends Resource
@@ -22,6 +23,12 @@ class InstallmentResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'Application Management';
 
     protected static ?int $navigationSort = 6;
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['application.customer', 'application.vendor']);
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -71,9 +78,9 @@ class InstallmentResource extends Resource
 
                         \Filament\Forms\Components\Select::make('status')
                             ->options([
-                                'pending'   => 'Pending',
-                                'paid'      => 'Paid',
-                                'overdue'   => 'Overdue',
+                                'pending' => 'Pending',
+                                'paid'    => 'Paid',
+                                'overdue' => 'Overdue',
                                 'cancelled' => 'Cancelled',
                             ])
                             ->required()
@@ -171,9 +178,9 @@ class InstallmentResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'pending'   => 'Pending',
-                        'paid'      => 'Paid',
-                        'overdue'   => 'Overdue',
+                        'pending' => 'Pending',
+                        'paid'    => 'Paid',
+                        'overdue' => 'Overdue',
                         'cancelled' => 'Cancelled',
                     ])
                     ->native(false),
@@ -181,11 +188,11 @@ class InstallmentResource extends Resource
                 Tables\Filters\Filter::make('overdue')
                     ->label('Overdue Only')
                     ->query(fn($query) => $query->where('due_date', '<', now())->where('status', '!=', 'paid')),
-
+                
                 Tables\Filters\Filter::make('unpaid')
                     ->label('Unpaid Only')
                     ->query(fn($query) => $query->whereNull('paid_at')),
-
+                
                 Tables\Filters\Filter::make('due_date')
                     ->form([
                         \Filament\Forms\Components\DatePicker::make('due_from')
@@ -208,7 +215,7 @@ class InstallmentResource extends Resource
                     ->visible(fn($record) => $record->status !== 'paid')
                     ->action(function ($record) {
                         $record->update([
-                            'status'  => 'paid',
+                            'status' => 'paid',
                             'paid_at' => now(),
                         ]);
                     }),
@@ -227,7 +234,7 @@ class InstallmentResource extends Resource
                             $records->each(function ($record) {
                                 if ($record->status !== 'paid') {
                                     $record->update([
-                                        'status'  => 'paid',
+                                        'status' => 'paid',
                                         'paid_at' => now(),
                                     ]);
                                 }
@@ -340,10 +347,10 @@ class InstallmentResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListInstallments::route('/'),
+            'index' => Pages\ListInstallments::route('/'),
             'create' => Pages\CreateInstallment::route('/create'),
-            'view'   => Pages\ViewInstallment::route('/{record}'),
-            'edit'   => Pages\EditInstallment::route('/{record}/edit'),
+            'view'  => Pages\ViewInstallment::route('/{record}'),
+            'edit'  => Pages\EditInstallment::route('/{record}/edit'),
         ];
     }
 }
