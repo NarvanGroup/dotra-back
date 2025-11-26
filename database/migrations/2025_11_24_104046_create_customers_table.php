@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table): void {
             $table->uuid('id')->primary();
             $table->string('national_code')->unique();
-            $table->string('mobile');
+            $table->string('mobile')->unique();
             $table->nullableUuidMorphs('creator');
             $table->string('first_name');
             $table->string('last_name');
@@ -25,10 +25,6 @@ return new class extends Migration
             $table->timestamp('otp_expires_at')->nullable();
             $table->string('password')->nullable();
             $table->timestamps();
-
-            // Indexes for performance
-            $table->index('mobile');
-            $table->index('national_code');
         });
     }
 

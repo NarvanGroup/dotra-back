@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('customer_id');
             $table->uuidMorphs('initiator');
             $table->date('issued_on');
-            $table->string('status')->default('pending');
+            $table->string('status')->default('pending')->index();
             $table->unsignedSmallInteger('overall_score')->nullable();
             $table->timestamps();
 

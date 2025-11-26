@@ -26,7 +26,6 @@ return new class extends Migration
                 ->on('vendors')
                 ->onDelete('cascade');
 
-            $table->index('customer_id');
             $table->index('vendor_id');
         });
     }

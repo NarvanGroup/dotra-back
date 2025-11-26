@@ -29,6 +29,9 @@ class CreateVisitsTable extends Migration
             $table->nullableMorphs('visitable'); // object model
             $table->nullableMorphs('visitor'); // subject model
             $table->timestamps();
+
+            $table->index('created_at');
+            $table->index('ip');
         });
     }
 

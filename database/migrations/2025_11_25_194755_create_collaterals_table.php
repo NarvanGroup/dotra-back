@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignUuid('vendor_id')->nullable()->constrained('vendors')->cascadeOnDelete();
             $table->foreignUuid('customer_id')->nullable()->constrained('customers')->cascadeOnDelete();
             $table->foreignUuid('application_id')->constrained('applications')->cascadeOnDelete();
-            $table->string('type');
+            $table->string('type')->index();
             $table->string('file_path')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

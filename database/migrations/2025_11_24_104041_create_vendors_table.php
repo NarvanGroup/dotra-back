@@ -31,10 +31,6 @@ return new class extends Migration
             $table->timestamp('otp_expires_at')->nullable();
             $table->string('password')->nullable();
             $table->timestamps();
-            
-            // Indexes for performance
-            $table->index('mobile');
-            $table->index('national_code');
         });
     }
 

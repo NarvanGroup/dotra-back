@@ -28,7 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('suggested_total_amount')->nullable();
             $table->unsignedSmallInteger('suggested_number_of_installments')->nullable();
             $table->decimal('suggested_interest_rate', 5, 2)->nullable();
-            $table->string('status')->default('terms-suggested');
+            $table->string('status')->default('terms-suggested')->index();
             $table->softDeletes();
             $table->timestamps();
         });

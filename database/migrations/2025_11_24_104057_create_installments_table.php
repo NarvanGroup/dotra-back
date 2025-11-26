@@ -18,9 +18,9 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->unsignedSmallInteger('installment_number');
             $table->unsignedBigInteger('amount');
-            $table->timestamp('due_date');
+            $table->timestamp('due_date')->index();
             $table->timestamp('paid_at')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('pending')->index();
             $table->timestamps();
         });
     }
