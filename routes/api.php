@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Vendor\ApplicationController;
 use App\Http\Controllers\Api\V1\Vendor\CollateralController;
 use App\Http\Controllers\Api\V1\Vendor\CreditScoreController;
 use App\Http\Controllers\Api\V1\Vendor\CustomerController;
+use App\Http\Controllers\Api\V1\Vendor\VendorController;
 use App\Http\Middleware\PreventMultipleLogins;
 use Illuminate\Support\Facades\Route;
 
@@ -64,5 +65,16 @@ Route::prefix('v1')->group(function (): void {
         Route::match(['put', 'patch'], 'applications/{application:id}', [ApplicationController::class, 'update'])->name('vendors.applications.update');
 
         Route::apiResource('collaterals', CollateralController::class)->names('vendors.collaterals');
+    });
+
+    Route::prefix('users/')->controller(VendorController::class)->group(static function () {
+        Route::get('profile', 'getProfile');
+        Route::post('profile', 'storeProfile');
+        Route::get('notifications', 'notifications');
+        Route::get('unreadNotifications', 'unreadNotifications');
+        Route::post('markAsReadNotification/{NotificationId}', 'markAsReadNotification');
+        Route::post('markAsUnreadNotification/{NotificationId}', 'markAsUnreadNotification');
+        Route::post('markAsReadAllNotifications', 'markAsReadAllNotifications');
+        Route::post('markAsUnreadAllNotifications', 'markAsUnreadAllNotifications');
     });
 });

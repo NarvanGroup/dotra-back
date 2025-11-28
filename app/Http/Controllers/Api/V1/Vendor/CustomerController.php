@@ -40,4 +40,5 @@ class CustomerController extends Controller
         return CustomerResource::make($customer);
     }
 
+
 }
