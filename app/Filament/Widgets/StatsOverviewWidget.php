@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Application;
+use App\Models\Collateral;
 use App\Models\CreditScore;
 use App\Models\Customer;
 use App\Models\Installment;
@@ -47,6 +48,11 @@ class StatsOverviewWidget extends BaseWidget
                 ->description('All credit scores issued')
                 ->descriptionIcon('heroicon-o-chart-bar')
                 ->color('success'),
+
+            Stat::make('Total Collaterals', Collateral::count())
+                ->description('All registered collaterals')
+                ->descriptionIcon('heroicon-o-document-duplicate')
+                ->color('info'),
 
             Stat::make('Overdue Installments', Installment::where('status', 'overdue')->count())
                 ->description('Installments past due date')

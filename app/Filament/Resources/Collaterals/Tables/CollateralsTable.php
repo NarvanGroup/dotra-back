@@ -28,6 +28,10 @@ class CollateralsTable
                     ->sortable()
                     ->searchable(['customer.first_name', 'customer.last_name'])
                     ->toggleable(),
+                TextColumn::make('application.id')
+                    ->label('Application ID')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('type')
                     ->badge()
                     ->sortable(),
