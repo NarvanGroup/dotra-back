@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Vendor;
 
 use App\Enums\CollateralType;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CollateralResource;
 use App\Models\Application;
 use App\Models\Collateral;
 use App\Traits\MessageFormaterTrait;
@@ -37,9 +38,10 @@ class CollateralController extends Controller
 
         $collaterals = $query->latest()->paginate(15);
 
-        return $this->successResponse(
+        return $this->paginateResponse(
             $collaterals,
-            $this->successMessage('collaterals', 'retrieved')
+            CollateralResource::collection($collaterals),
+            'collaterals fetched successfully'
         );
     }
 
@@ -62,25 +64,19 @@ class CollateralController extends Controller
         $user = $request->user();
         if ($user && $user instanceof \App\Models\Vendor) {
             if ($validated['vendor_id'] !== $user->id) {
-                return $this->errorResponse(
-                    $this->errorMessage('vendor', 'unauthorized'),
-                    403
-                );
+                return $this->responseForbidden('Unauthorized vendor access');
             }
             if ($application->vendor_id !== $user->id) {
-                return $this->errorResponse(
-                    $this->errorMessage('application', 'unauthorized'),
-                    403
-                );
+                return $this->responseForbidden('Unauthorized application access');
             }
         }
 
         // Validate that customer_id matches the application's customer
         if ($application->customer_id !== $validated['customer_id']) {
-            return $this->errorResponse(
-                $this->errorMessage('customer', 'mismatch'), // You might need to add this message key
-                422,
-                ['customer_id' => 'Customer ID does not match the application customer.']
+            return $this->response(
+                ['customer_id' => 'Customer ID does not match the application customer.'],
+                'Customer mismatch',
+                422
             );
         }
 
@@ -95,10 +91,9 @@ class CollateralController extends Controller
             'description'    => $validated['description'] ?? null,
         ]);
 
-        return $this->successResponse(
-            $collateral,
-            $this->successMessage('collateral', 'created'),
-            201
+        return $this->responseCreated(
+            CollateralResource::make($collateral),
+            'collateral created successfully'
         );
     }
 
@@ -106,9 +101,9 @@ class CollateralController extends Controller
     {
         $this->authorize('view', $collateral);
 
-        return $this->successResponse(
-            $collateral,
-            $this->successMessage('collateral', 'retrieved')
+        return $this->responseShow(
+            CollateralResource::make($collateral),
+            'collateral retrieved successfully'
         );
     }
 
@@ -122,9 +117,6 @@ class CollateralController extends Controller
 
         $collateral->delete();
 
-        return $this->successResponse(
-            null,
-            $this->successMessage('collateral', 'deleted')
-        );
+        return $this->responseDestroyed('collateral deleted successfully');
     }
 }

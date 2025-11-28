@@ -67,7 +67,7 @@ Route::prefix('v1')->group(function (): void {
         Route::apiResource('collaterals', CollateralController::class)->names('vendors.collaterals');
     });
 
-    Route::prefix('users/')->controller(VendorController::class)->group(static function () {
+    Route::middleware('auth:sanctum')->prefix('users/')->controller(VendorController::class)->group(static function () {
         Route::get('profile', 'getProfile');
         Route::post('profile', 'storeProfile');
         Route::get('notifications', 'notifications');

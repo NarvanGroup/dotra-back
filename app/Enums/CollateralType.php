@@ -23,3 +23,4 @@ enum CollateralType: string implements HasLabel
 
 
 
+
