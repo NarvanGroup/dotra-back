@@ -33,6 +33,20 @@ class StoreApplicationRequest extends FormRequest
                 Rule::exists('credit_scores', 'id')
                     ->where(fn($query) => $query->where('customer_id', $this->input('customer_id')))
             ],
+            'principal_amount'    => ['sometimes', 'nullable', 'integer', 'min:0'],
+            'down_payment_amount' => [
+                'sometimes',
+                'nullable',
+                'integer',
+                'min:0',
+                function ($attribute, $value, $fail) {
+                    $principalAmount = $this->input('principal_amount');
+                    if ($value !== null && $principalAmount !== null && $value > $principalAmount) {
+                        $fail('The down payment amount cannot exceed the principal amount.');
+                    }
+                },
+            ],
+            'total_payable_amount' => ['prohibited'], // Auto-calculated, cannot be set manually
         ];
     }
 }

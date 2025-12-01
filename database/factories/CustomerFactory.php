@@ -21,8 +21,8 @@ class CustomerFactory extends Factory
         return [
             'national_code' => $this->faker->unique()->numerify('##########'),
             'mobile' => $this->faker->unique()->numerify('09#########'),
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
             'birth_date' => $this->faker->dateTimeBetween('-65 years', '-18 years'),
             'email' => $this->faker->optional()->safeEmail(),
             'address' => $this->faker->optional()->address(),

@@ -37,8 +37,11 @@ class LatestApplicationsWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('vendor.name')
                     ->label('Vendor'),
 
-                Tables\Columns\TextColumn::make('total_amount')
-                    ->label('Amount')
+                Tables\Columns\TextColumn::make('principal_amount')
+                    ->label('Principal')
+                    ->money('IRR'),
+                Tables\Columns\TextColumn::make('total_payable_amount')
+                    ->label('Total Payable')
                     ->money('IRR'),
 
                 Tables\Columns\TextColumn::make('status')

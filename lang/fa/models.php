@@ -3,6 +3,11 @@
 return [
     'applications' => [
         'label' => 'درخواست‌ها',
+        'principal_amount' => 'مبلغ اصلی',
+        'down_payment_amount' => 'مبلغ پیش‌پرداخت',
+        'total_payable_amount' => 'مبلغ کل قابل پرداخت',
+        'number_of_installments' => 'تعداد اقساط',
+        'interest_rate' => 'نرخ بهره',
         'statuses' => [
             'terms-suggested' => 'پیشنهاد ثبت‌شده',
             'vendor-adjusting' => 'در حال بازبینی فروشنده',

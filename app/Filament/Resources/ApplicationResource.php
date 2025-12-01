@@ -76,8 +76,15 @@ class ApplicationResource extends Resource
 
                 \Filament\Schemas\Components\Section::make('Requested Terms')
                     ->schema([
-                        \Filament\Forms\Components\TextInput::make('total_amount')
-                            ->label('Total Amount')
+                        \Filament\Forms\Components\TextInput::make('principal_amount')
+                            ->label('Principal Amount')
+                            ->numeric()
+                            ->prefix('IRR')
+                            ->maxLength(255)
+                            ->columnSpan(1),
+
+                        \Filament\Forms\Components\TextInput::make('down_payment_amount')
+                            ->label('Down Payment Amount')
                             ->numeric()
                             ->prefix('IRR')
                             ->maxLength(255)
@@ -99,7 +106,7 @@ class ApplicationResource extends Resource
                             ->step(0.01)
                             ->columnSpan(1),
                     ])
-                    ->columns(3),
+                    ->columns(4),
 
                 \Filament\Schemas\Components\Section::make('Suggested Terms')
                     ->schema([
@@ -155,8 +162,13 @@ class ApplicationResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('total_amount')
-                    ->label('Amount')
+                Tables\Columns\TextColumn::make('principal_amount')
+                    ->label('Principal')
+                    ->money('IRR')
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('total_payable_amount')
+                    ->label('Total Payable')
                     ->money('IRR')
                     ->sortable(),
 
@@ -223,7 +235,7 @@ class ApplicationResource extends Resource
                     ->preload()
                     ->native(false),
 
-                Tables\Filters\Filter::make('total_amount')
+                Tables\Filters\Filter::make('principal_amount')
                     ->form([
                         \Filament\Forms\Components\TextInput::make('amount_from')
                             ->numeric()
@@ -234,8 +246,8 @@ class ApplicationResource extends Resource
                     ])
                     ->query(function ($query, array $data) {
                         return $query
-                            ->when($data['amount_from'], fn($q, $amount) => $q->where('total_amount', '>=', $amount))
-                            ->when($data['amount_to'], fn($q, $amount) => $q->where('total_amount', '<=', $amount));
+                            ->when($data['amount_from'], fn($q, $amount) => $q->where('principal_amount', '>=', $amount))
+                            ->when($data['amount_to'], fn($q, $amount) => $q->where('principal_amount', '<=', $amount));
                     }),
 
                 Tables\Filters\TrashedFilter::make(),
@@ -292,14 +304,21 @@ class ApplicationResource extends Resource
 
                 \Filament\Schemas\Components\Section::make('Requested Terms')
                     ->schema([
-                        \Filament\Infolists\Components\TextEntry::make('total_amount')
+                        \Filament\Infolists\Components\TextEntry::make('principal_amount')
+                            ->label('Principal Amount')
+                            ->money('IRR'),
+                        \Filament\Infolists\Components\TextEntry::make('down_payment_amount')
+                            ->label('Down Payment Amount')
+                            ->money('IRR'),
+                        \Filament\Infolists\Components\TextEntry::make('total_payable_amount')
+                            ->label('Total Payable Amount')
                             ->money('IRR'),
                         \Filament\Infolists\Components\TextEntry::make('number_of_installments')
                             ->suffix(' months'),
                         \Filament\Infolists\Components\TextEntry::make('interest_rate')
                             ->suffix('%'),
                     ])
-                    ->columns(3),
+                    ->columns(5),
 
                 \Filament\Schemas\Components\Section::make('Suggested Terms')
                     ->schema([

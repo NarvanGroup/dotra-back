@@ -36,7 +36,7 @@ class CustomerController extends Controller
     }
 
     public function show(Vendor $vendor, Customer $customer): CustomerResource
-    {   
+    {
         return CustomerResource::make($customer);
     }
 

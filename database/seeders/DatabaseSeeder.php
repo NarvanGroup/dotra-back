@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\ApplicationSeeder;
+use Database\Seeders\Contract\TemplateSeeder;
 use Database\Seeders\CustomerSeeder;
 use Database\Seeders\VendorSeeder;
 
@@ -19,9 +20,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CustomerSeeder::class,
             VendorSeeder::class,
-            ApplicationSeeder::class,
+            TemplateSeeder::class,
+            CustomerSeeder::class,
         ]);
     }
 }

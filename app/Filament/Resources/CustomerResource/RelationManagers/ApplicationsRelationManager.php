@@ -30,7 +30,13 @@ class ApplicationsRelationManager extends RelationManager
                     ->native(false)
                     ->preload(),
 
-                \Filament\Forms\Components\TextInput::make('total_amount')
+                \Filament\Forms\Components\TextInput::make('principal_amount')
+                    ->label('Principal Amount')
+                    ->numeric()
+                    ->prefix('IRR'),
+
+                \Filament\Forms\Components\TextInput::make('down_payment_amount')
+                    ->label('Down Payment Amount')
                     ->numeric()
                     ->prefix('IRR'),
 
@@ -62,7 +68,11 @@ class ApplicationsRelationManager extends RelationManager
                     ->copyable(),
                 Tables\Columns\TextColumn::make('vendor.name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('total_amount')
+                Tables\Columns\TextColumn::make('principal_amount')
+                    ->label('Principal')
+                    ->money('IRR'),
+                Tables\Columns\TextColumn::make('total_payable_amount')
+                    ->label('Total Payable')
                     ->money('IRR'),
                 Tables\Columns\TextColumn::make('number_of_installments')
                     ->label('Installments')

@@ -12,6 +12,7 @@ use App\Models\Vendor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApplicationController extends Controller
@@ -28,7 +29,7 @@ class ApplicationController extends Controller
 
     public function store(StoreApplicationRequest $request, Vendor $vendor): JsonResponse
     {
-        $application = $vendor->applications()->create($request->validated());
+        $application = Application::createByVendor($vendor, $request->validated());
 
         return ApplicationResource::make(
             $application->load(['customer', 'vendor', 'creditScore'])
@@ -44,7 +45,9 @@ class ApplicationController extends Controller
 
     public function update(UpdateApplicationRequest $request, Vendor $vendor, Application $application): ApplicationResource
     {
-        $application->update($request->validated());
+        DB::transaction(function () use ($request, $application) {
+            $application->update($request->validated());
+        });
 
         return ApplicationResource::make($application->load(['customer', 'vendor', 'installments', 'creditScore']));
     }
