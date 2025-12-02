@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Installment\Status;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,7 @@ class Installment extends Model
     protected $casts = [
         'due_date' => 'datetime',
         'paid_at' => 'datetime',
+        'status' => Status::class,
     ];
 
     public function getRouteKeyName(): string

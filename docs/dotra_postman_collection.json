@@ -2,9 +2,9 @@
   "info": {
     "_postman_id": "d3e7b6c4-1234-5678-9abc-def012345678",
     "name": "Dotra API",
-    "description": "Complete API collection for Dotra platform including authentication and vendor-facing operations.\n\n## Base URL\n- Local: `http://localhost:8000/api`\n- Production: `https://api.dotra.com/api`\n\n## API Versioning\nAll endpoints are versioned under `/v1`. This is version 1 of the API.\n\n## Authentication\nAuthentication uses Laravel Sanctum for token-based auth. Include the Bearer token in the Authorization header for protected endpoints.\n\n## Variables\n- `baseUrl`: Base API URL\n- `authToken`: Bearer token for authenticated requests\n- `vendorSlug`: Vendor identifier (e.g., 'dotra', 'tech-corp')\n- `applicationId`: Application ID for testing\n- `customerId`: Customer ID for testing",
+    "description": "Complete API collection for Dotra platform including authentication and vendor-facing operations.\n\n## Base URL\n- Local: `http://localhost:8000/api`\n- Production: `https://api.dotra.com/api`\n\n## API Versioning\nAll endpoints are versioned under `/v1`. This is version 1 of the API.\n\n## Authentication\nAuthentication uses Laravel Sanctum for token-based auth. Include the Bearer token in the Authorization header for protected endpoints.\n\n## Variables\n- `baseUrl`: Base API URL\n- `authToken`: Bearer token for authenticated requests\n- `vendorSlug`: Vendor identifier (e.g., 'dotra', 'tech-corp')\n- `applicationId`: Application ID for testing\n- `customerId`: Customer ID for testing\n- `contractId`: Contract ID for testing",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "variable": [
     {
@@ -36,15 +36,325 @@
       "value": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
       "type": "string",
       "description": "Customer ID for testing"
+    },
+    {
+      "key": "contractId",
+      "value": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "type": "string",
+      "description": "Contract ID for testing"
     }
   ],
   "item": [
     {
-      "name": "Authentication",
-      "description": "Authentication endpoints for vendors and customers",
+      "name": "Customer",
+      "description": "Customer-facing API endpoints",
       "item": [
         {
-          "name": "Vendor",
+          "name": "Authentication",
+          "description": "Customer authentication endpoints",
+          "item": [
+            {
+              "name": "Register Customer",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"national_id\": \"1234567890\",\n    \"first_name\": \"علی\",\n    \"last_name\": \"احمدی\",\n    \"birth_date\": \"1990-05-15\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/signup",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "signup"
+                  ]
+                },
+                "description": "Register a new customer account. An OTP will be sent for verification.\n\n**Required Fields:**\n- `mobile` (string): Mobile number (09XXXXXXXXX format)\n- `national_id` (string): National ID (10 digits)\n- `first_name` (string): First name\n- `last_name` (string): Last name\n- `birth_date` (date): Birth date (YYYY-MM-DD format, must be before today)\n\n**Note:** Rate-limited to 60 requests per hour."
+              },
+              "response": []
+            },
+            {
+              "name": "Send OTP (Customer)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/sendOtp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "sendOtp"
+                  ]
+                },
+                "description": "Send an OTP code to a registered customer's mobile number.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n\n**Note:** Rate-limited to 60 requests per hour."
+              },
+              "response": []
+            },
+            {
+              "name": "Login with OTP (Customer)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the auth token",
+                      "if (pm.response.code === 200) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.token) {",
+                      "        pm.collectionVariables.set('authToken', jsonData.token);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"otp\": \"123456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/loginOtp",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "loginOtp"
+                  ]
+                },
+                "description": "Login using OTP verification.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `otp` (string): OTP code received via SMS"
+              },
+              "response": []
+            },
+            {
+              "name": "Login with Password (Customer)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Auto-save the auth token",
+                      "if (pm.response.code === 200) {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.token) {",
+                      "        pm.collectionVariables.set('authToken', jsonData.token);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"password\": \"password123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/loginPassword",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "loginPassword"
+                  ]
+                },
+                "description": "Login using password.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `password` (string): Account password"
+              },
+              "response": []
+            },
+            {
+              "name": "Logout (Customer)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "logout"
+                  ]
+                },
+                "description": "Logout and revoke the current access token.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Contract",
+          "description": "Customer contract management endpoints",
+          "item": [
+            {
+              "name": "Show Contract",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/contracts/{{contractId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "contracts",
+                    "{{contractId}}"
+                  ]
+                },
+                "description": "Retrieve a contract with its associated application details.\n\n**Response includes:**\n- Contract details\n- Associated application information\n\n**Note:** Rate-limited to 60 requests per hour."
+              },
+              "response": []
+            },
+            {
+              "name": "Update Contract (Sign)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"signed_by_customer\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/customers/contracts/{{contractId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "customers",
+                    "contracts",
+                    "{{contractId}}"
+                  ]
+                },
+                "description": "Sign a contract by the customer. This will confirm the application by the customer and create installments.\n\n**Required:**\n- `signed_by_customer` (boolean): Must be `true` to sign the contract\n\n**Note:** Rate-limited to 60 requests per hour. This action triggers the creation of installments based on the application's terms."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vendor",
+      "description": "Vendor-facing API endpoints",
+      "item": [
+        {
+          "name": "Authentication",
           "description": "Vendor authentication endpoints",
           "item": [
             {
@@ -289,12 +599,698 @@
           ]
         },
         {
-          "name": "Customer",
-          "description": "Customer authentication endpoints",
+          "name": "Application",
+          "description": "Endpoints for managing financing applications",
           "item": [
             {
-              "name": "Register Customer",
+              "name": "List Applications",
               "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications?per_page=15",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "applications"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "15",
+                      "description": "Number of items per page (optional, default: 15)"
+                    }
+                  ]
+                },
+                "description": "Retrieve a paginated list of all applications for a vendor. Includes related customer data.\n\n**Response includes:**\n- Application details (amount, installments, interest rate, status)\n- Customer information (name, national code, mobile)\n- Pagination metadata\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Application",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON content type"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"customer_id\": \"6ba7b810-9dad-11d1-80b4-00c04fd430c8\",\n    \"credit_score_id\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n    \"principal_amount\": 10000000,\n    \"down_payment_amount\": 2000000,\n    \"number_of_installments\": 12,\n    \"interest_rate\": 12.5,\n    \"suggested_total_amount\": 8000000,\n    \"suggested_number_of_installments\": 10,\n    \"suggested_interest_rate\": 10.0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "applications"
+                  ]
+                },
+                "description": "Create a new financing application for a customer under the vendor.\n\n**Required Fields:**\n- `customer_id` (UUID): Must exist in customers table\n- `credit_score_id` (UUID): Must belong to the provided customer\n\n**Optional Fields:**\n- `principal_amount` (integer, nullable): Minimum 0\n- `down_payment_amount` (integer, nullable): Minimum 0, cannot exceed principal_amount\n- `number_of_installments` (integer): Between 1 and 32767\n- `interest_rate` (numeric, nullable): Minimum 0\n- `suggested_total_amount` (integer): Minimum 1\n- `suggested_number_of_installments` (integer): Between 1 and 32767\n- `suggested_interest_rate` (numeric): Minimum 0\n\n> The credit score associated with an application is immutable after creation.\n> A contract is automatically created when an application is created.\n> `total_payable_amount` is auto-calculated based on principal_amount, down_payment_amount, and interest_rate.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "View Application (Edit)",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications/{{applicationId}}/edit",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "applications",
+                    "{{applicationId}}",
+                    "edit"
+                  ]
+                },
+                "description": "Fetch a single application with all related data for editing purposes.\n\n**Includes:**\n- Application details\n- Customer information\n- Vendor information\n- Installments (if any)\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Application",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON content type"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"principal_amount\": 12000000,\n    \"down_payment_amount\": 3000000,\n    \"number_of_installments\": 14,\n    \"interest_rate\": 11.8\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications/{{applicationId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "applications",
+                    "{{applicationId}}"
+                  ]
+                },
+                "description": "Update an existing application. Supports both PUT and PATCH methods.\n\n**Vendors can update the following fields (all optional):**\n- `principal_amount` (integer, nullable): Minimum 0\n- `down_payment_amount` (integer, nullable): Minimum 0, cannot exceed principal_amount\n- `number_of_installments` (integer): Between 1 and 32767\n- `interest_rate` (numeric, nullable): Minimum 0\n- `status` (string): Must be a valid Status enum value\n\n**Important Restrictions:**\n- `customer_id` can be updated (must be a valid UUID)\n- `credit_score_id` cannot be updated (immutable after creation)\n- `total_payable_amount` cannot be updated (auto-calculated based on principal_amount, down_payment_amount, and interest_rate)\n- `suggested_total_amount`, `suggested_number_of_installments`, and `suggested_interest_rate` cannot be updated by vendors\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Customer",
+          "description": "Endpoints for managing customers associated with a vendor",
+          "item": [
+            {
+              "name": "List Customers",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers?per_page=15",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "customers"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "15",
+                      "description": "Number of items per page (optional, default: 15)"
+                    }
+                  ]
+                },
+                "description": "Retrieve a paginated list of customers that have at least one application with the vendor.\n\n**Note:** Only returns customers who have created applications with this specific vendor.\n\n**Response includes:**\n- Customer details (name, national code, mobile, email, address)\n- Pagination metadata\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Create or Fetch Customer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "description": "JSON content type"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"national_code\": \"1234567890\",\n    \"mobile\": \"09123456789\",\n    \"first_name\": \"علی\",\n    \"last_name\": \"احمدی\",\n    \"birth_date\": \"1990-05-15\",\n    \"email\": \"ali.ahmadi@example.com\",\n    \"address\": \"تهران، خیابان ولیعصر، پلاک 123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "customers"
+                  ]
+                },
+                "description": "Create a new customer or return existing customer if national code already exists.\n\n**Behavior:**\n- If customer with `national_code` exists: Returns existing customer (HTTP 200)\n- If customer is new: Creates and returns new customer (HTTP 201)\n\n**Required Fields:**\n- `national_code` (string): Exactly 10 characters\n- `mobile` (string): Must match pattern `^09\\d{9}$` (Iranian mobile format)\n- `first_name` (string): Max 255 characters, must be Persian name\n- `last_name` (string): Max 255 characters, must be Persian name\n- `birth_date` (date): Valid date format (YYYY-MM-DD)\n\n**Optional Fields:**\n- `email` (string): Valid email format, max 255 characters\n- `address` (string): Max 255 characters\n\n**Note:** The creator (vendor or authenticated customer) is automatically set based on the authenticated user.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Show Customer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "customers",
+                    "{{customerId}}"
+                  ]
+                },
+                "description": "Fetch a single customer resource by ID.\n\n**Response includes:**\n- Customer ID\n- National code\n- Mobile number\n- First and last name (Persian)\n- Birth date\n- Email (if provided)\n- Address (if provided)\n- Timestamps\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Confirm Customer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}/confirm",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "customers",
+                    "{{customerId}}",
+                    "confirm"
+                  ]
+                },
+                "description": "Confirm a customer's verification. This endpoint processes customer verification.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Request Credit Score",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}/credit-scores",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "customers",
+                    "{{customerId}}",
+                    "credit-scores"
+                  ]
+                },
+                "description": "Trigger the credit scoring engine for the specified customer. Generates a new credit score initiated by the vendor.\n\n**Important:**\n- No request body is required\n- If a recent score exists, future optimization may return it instead of creating a new record\n- The response returns the newly created score\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Latest Credit Score",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "description": "Request JSON response"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}/credit-scores",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "customers",
+                    "{{customerId}}",
+                    "credit-scores"
+                  ]
+                },
+                "description": "Fetch the most recent credit score that belongs to the given customer. Response is sorted by `issued_on` and returns the latest record.\n\n**Response includes:**\n- Score metadata (ID, issued date, status, overall score)\n- Nested customer summary (if loaded)\n- Timestamps\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Collaterals",
+          "description": "Endpoints for managing application collaterals",
+          "item": [
+            {
+              "name": "List Collaterals",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals?application_id={{applicationId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "collaterals"
+                  ],
+                  "query": [
+                    {
+                      "key": "application_id",
+                      "value": "{{applicationId}}",
+                      "description": "Filter by Application ID"
+                    }
+                  ]
+                },
+                "description": "List collaterals, optionally filtered by application_id.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Collateral",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "application_id",
+                      "value": "{{applicationId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "vendor_id",
+                      "value": "98765432-1234-5678-9abc-def012345678",
+                      "type": "text"
+                    },
+                    {
+                      "key": "customer_id",
+                      "value": "{{customerId}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "type",
+                      "value": "check",
+                      "type": "text"
+                    },
+                    {
+                      "key": "file_path",
+                      "type": "file",
+                      "src": []
+                    },
+                    {
+                      "key": "description",
+                      "value": "Test collateral",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "collaterals"
+                  ]
+                },
+                "description": "Create a new collateral for an application.\n\n**Required:**\n- `application_id`\n- `vendor_id`\n- `customer_id`\n- `type` (check, promissory_note, other)\n- `file_path` (image or pdf)\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Collateral",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals/{{collateralId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "collaterals",
+                    "{{collateralId}}"
+                  ]
+                },
+                "description": "Retrieve a single collateral by ID.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Collateral",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals/{{collateralId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "vendors",
+                    "{{vendorSlug}}",
+                    "collaterals",
+                    "{{collateralId}}"
+                  ]
+                },
+                "description": "Delete a collateral.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Profile",
+          "description": "Vendor profile and notification management endpoints",
+          "item": [
+            {
+              "name": "Get Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/profile",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Get the authenticated vendor's profile information.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
                 "method": "POST",
                 "header": [
                   {
@@ -308,7 +1304,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"national_id\": \"1234567890\",\n    \"first_name\": \"علی\",\n    \"last_name\": \"احمدی\",\n    \"birth_date\": \"1990-05-15\"\n}",
+                  "raw": "{}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -316,170 +1312,92 @@
                   }
                 },
                 "url": {
-                  "raw": "{{baseUrl}}/v1/customers/signup",
+                  "raw": "{{baseUrl}}/v1/users/profile",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "v1",
-                    "customers",
-                    "signup"
+                    "users",
+                    "profile"
                   ]
                 },
-                "description": "Register a new customer account. An OTP will be sent for verification.\n\n**Required Fields:**\n- `mobile` (string): Mobile number (09XXXXXXXXX format)\n- `national_id` (string): National ID (10 digits)\n- `first_name` (string): First name\n- `last_name` (string): Last name\n- `birth_date` (date): Birth date (YYYY-MM-DD format, must be before today)\n\n**Note:** Rate-limited to 60 requests per hour."
+                "description": "Update the authenticated vendor's profile.\n\n**Authentication Required:** Bearer token in Authorization header"
               },
               "response": []
             },
             {
-              "name": "Send OTP (Customer)",
+              "name": "Get All Notifications",
               "request": {
-                "method": "POST",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
                   }
                 ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"mobile\": \"09123456789\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
-                  "raw": "{{baseUrl}}/v1/customers/sendOtp",
+                  "raw": "{{baseUrl}}/v1/users/notifications",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "v1",
-                    "customers",
-                    "sendOtp"
+                    "users",
+                    "notifications"
                   ]
                 },
-                "description": "Send an OTP code to a registered customer's mobile number.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n\n**Note:** Rate-limited to 60 requests per hour."
+                "description": "Get all notifications for the authenticated vendor.\n\n**Authentication Required:** Bearer token in Authorization header"
               },
               "response": []
             },
             {
-              "name": "Login with OTP (Customer)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "// Auto-save the auth token",
-                      "if (pm.response.code === 200) {",
-                      "    var jsonData = pm.response.json();",
-                      "    if (jsonData.token) {",
-                      "        pm.collectionVariables.set('authToken', jsonData.token);",
-                      "    }",
-                      "}"
-                    ]
-                  }
-                }
-              ],
+              "name": "Get Unread Notifications",
               "request": {
-                "method": "POST",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
                   }
                 ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"otp\": \"123456\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
-                  "raw": "{{baseUrl}}/v1/customers/loginOtp",
+                  "raw": "{{baseUrl}}/v1/users/unreadNotifications",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "v1",
-                    "customers",
-                    "loginOtp"
+                    "users",
+                    "unreadNotifications"
                   ]
                 },
-                "description": "Login using OTP verification.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `otp` (string): OTP code received via SMS"
+                "description": "Get all unread notifications for the authenticated vendor.\n\n**Authentication Required:** Bearer token in Authorization header"
               },
               "response": []
             },
             {
-              "name": "Login with Password (Customer)",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "// Auto-save the auth token",
-                      "if (pm.response.code === 200) {",
-                      "    var jsonData = pm.response.json();",
-                      "    if (jsonData.token) {",
-                      "        pm.collectionVariables.set('authToken', jsonData.token);",
-                      "    }",
-                      "}"
-                    ]
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n    \"mobile\": \"09123456789\",\n    \"password\": \"password123\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/v1/customers/loginPassword",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "v1",
-                    "customers",
-                    "loginPassword"
-                  ]
-                },
-                "description": "Login using password.\n\n**Required:**\n- `mobile` (string): Registered mobile number\n- `password` (string): Account password"
-              },
-              "response": []
-            },
-            {
-              "name": "Logout (Customer)",
+              "name": "Mark Notification as Read",
               "request": {
                 "auth": {
                   "type": "bearer",
@@ -499,17 +1417,124 @@
                   }
                 ],
                 "url": {
-                  "raw": "{{baseUrl}}/v1/customers/logout",
+                  "raw": "{{baseUrl}}/v1/users/markAsReadNotification/{NotificationId}",
                   "host": [
                     "{{baseUrl}}"
                   ],
                   "path": [
                     "v1",
-                    "customers",
-                    "logout"
+                    "users",
+                    "markAsReadNotification",
+                    "{NotificationId}"
                   ]
                 },
-                "description": "Logout and revoke the current access token.\n\n**Authentication Required:** Bearer token in Authorization header"
+                "description": "Mark a specific notification as read.\n\n**Path Parameters:**\n- `NotificationId` (string): The ID of the notification to mark as read\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Mark Notification as Unread",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/markAsUnreadNotification/{NotificationId}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    "markAsUnreadNotification",
+                    "{NotificationId}"
+                  ]
+                },
+                "description": "Mark a specific notification as unread.\n\n**Path Parameters:**\n- `NotificationId` (string): The ID of the notification to mark as unread\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Mark All Notifications as Read",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/markAsReadAllNotifications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    "markAsReadAllNotifications"
+                  ]
+                },
+                "description": "Mark all unread notifications as read for the authenticated vendor.\n\n**Authentication Required:** Bearer token in Authorization header"
+              },
+              "response": []
+            },
+            {
+              "name": "Mark All Notifications as Unread",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/users/markAsUnreadAllNotifications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "users",
+                    "markAsUnreadAllNotifications"
+                  ]
+                },
+                "description": "Mark all read notifications as unread for the authenticated vendor.\n\n**Authentication Required:** Bearer token in Authorization header"
               },
               "response": []
             }
@@ -518,163 +1543,11 @@
       ]
     },
     {
-      "name": "Applications",
-      "description": "Endpoints for managing financing applications",
+      "name": "Public",
+      "description": "Public endpoints that don't require authentication",
       "item": [
         {
-          "name": "List Applications",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications?per_page=15",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "applications"
-              ],
-              "query": [
-                {
-                  "key": "per_page",
-                  "value": "15",
-                  "description": "Number of items per page (optional, default: 15)"
-                }
-              ]
-            },
-            "description": "Retrieve a paginated list of all applications for a vendor. Includes related customer data.\n\n**Response includes:**\n- Application details (amount, installments, interest rate, status)\n- Customer information (name, national code, mobile)\n- Pagination metadata"
-          },
-          "response": []
-        },
-        {
-          "name": "Create Application",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON content type"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"customer_id\": \"6ba7b810-9dad-11d1-80b4-00c04fd430c8\",\n    \"credit_score_id\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n    \"total_amount\": 10000000,\n    \"number_of_installments\": 12,\n    \"interest_rate\": 12.5,\n    \"suggested_total_amount\": 8000000,\n    \"suggested_number_of_installments\": 10,\n    \"suggested_interest_rate\": 10.0,\n    \"status\": \"pending\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "applications"
-              ]
-            },
-            "description": "Create a new financing application for a customer under the vendor.\n\n**Required Fields:**\n- `customer_id` (UUID): Must exist in customers table\n- `credit_score_id` (UUID): Must belong to the provided customer\n- `total_amount` (integer): Minimum 1\n- `number_of_installments` (integer): Between 1 and 32767\n- `suggested_total_amount` (integer): Minimum 1\n- `suggested_number_of_installments` (integer): Between 1 and 32767\n\n**Optional Fields:**\n- `interest_rate` (numeric): Minimum 0\n- `suggested_interest_rate` (numeric): Minimum 0\n- `status` (string): Max 255 characters\n\n> The credit score associated with an application is immutable after creation."
-          },
-          "response": []
-        },
-        {
-          "name": "View Application (Edit)",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications/{{applicationId}}/edit",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "applications",
-                "{{applicationId}}",
-                "edit"
-              ]
-            },
-            "description": "Fetch a single application with all related data for editing purposes.\n\n**Includes:**\n- Application details\n- Customer information\n- Vendor information\n- Installments (if any)\n\n**Note:** Requires authorization (user must have 'view' permission for the application)."
-          },
-          "response": []
-        },
-        {
-          "name": "Update Application",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON content type"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"total_amount\": 12000000,\n    \"number_of_installments\": 14,\n    \"interest_rate\": 11.8\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/applications/{{applicationId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "applications",
-                "{{applicationId}}"
-              ]
-            },
-            "description": "Update an existing application. Supports both PUT and PATCH methods.\n\n**Vendors can only update the following fields (all optional):**\n- `total_amount` (integer): Minimum 1\n- `number_of_installments` (integer): Between 1 and 32767\n- `interest_rate` (numeric, nullable): Minimum 0\n\n**Important Restrictions:**\n- `customer_id` cannot be updated\n- `credit_score_id` cannot be updated (immutable after creation)\n- `suggested_total_amount`, `suggested_number_of_installments`, and `suggested_interest_rate` cannot be updated by vendors\n- `status` is managed automatically by model logic and cannot be set via this endpoint\n\n**Note:** Requires authorization (user must have 'update' permission for the application)."
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Collaterals",
-      "description": "Endpoints for managing application collaterals",
-      "item": [
-        {
-          "name": "List Collaterals",
+          "name": "Process Verification",
           "request": {
             "method": "GET",
             "header": [
@@ -684,311 +1557,16 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals",
+              "raw": "{{baseUrl}}/v1/process",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "collaterals"
-              ],
-              "query": [
-                {
-                  "key": "application_id",
-                  "value": "{{applicationId}}",
-                  "description": "Filter by Application ID"
-                }
+                "process"
               ]
             },
-            "description": "List collaterals, optionally filtered by application_id."
-          },
-          "response": []
-        },
-        {
-          "name": "Create Collateral",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "formdata",
-              "formdata": [
-                {
-                  "key": "application_id",
-                  "value": "{{applicationId}}",
-                  "type": "text"
-                },
-                {
-                  "key": "vendor_id",
-                  "value": "98765432-1234-5678-9abc-def012345678",
-                  "type": "text"
-                },
-                {
-                  "key": "customer_id",
-                  "value": "{{customerId}}",
-                  "type": "text"
-                },
-                {
-                  "key": "type",
-                  "value": "check",
-                  "type": "text"
-                },
-                {
-                  "key": "file_path",
-                  "type": "file",
-                  "src": []
-                },
-                {
-                  "key": "description",
-                  "value": "Test collateral",
-                  "type": "text"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "collaterals"
-              ]
-            },
-            "description": "Create a new collateral for an application.\n\n**Required:**\n- `application_id`\n- `vendor_id`\n- `customer_id`\n- `type` (check, promissory_note, other)\n- `file_path` (image or pdf)"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Collateral",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals/{{collateralId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "collaterals",
-                "{{collateralId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete Collateral",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/collaterals/{{collateralId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "collaterals",
-                "{{collateralId}}"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Customers",
-      "description": "Endpoints for managing customers associated with a vendor",
-      "item": [
-        {
-          "name": "List Customers",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers?per_page=15",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "customers"
-              ],
-              "query": [
-                {
-                  "key": "per_page",
-                  "value": "15",
-                  "description": "Number of items per page (optional, default: 15)"
-                }
-              ]
-            },
-            "description": "Retrieve a paginated list of customers that have at least one application with the vendor.\n\n**Note:** Only returns customers who have created applications with this specific vendor.\n\n**Response includes:**\n- Customer details (name, national code, mobile, email, address)\n- Pagination metadata"
-          },
-          "response": []
-        },
-        {
-          "name": "Create or Fetch Customer",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "description": "JSON content type"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"national_code\": \"1234567890\",\n    \"mobile\": \"09123456789\",\n    \"first_name\": \"علی\",\n    \"last_name\": \"احمدی\",\n    \"birth_date\": \"1990-05-15\",\n    \"email\": \"ali.ahmadi@example.com\",\n    \"address\": \"تهران، خیابان ولیعصر، پلاک 123\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "customers"
-              ]
-            },
-            "description": "Create a new customer or return existing customer if national code already exists.\n\n**Behavior:**\n- If customer with `national_code` exists: Returns existing customer (HTTP 200)\n- If customer is new: Creates and returns new customer (HTTP 201)\n\n**Required Fields:**\n- `national_code` (string): Exactly 10 characters\n- `mobile` (string): Must match pattern `^09\\d{9}$` (Iranian mobile format)\n- `first_name` (string): Max 255 characters, must be Persian name\n- `last_name` (string): Max 255 characters, must be Persian name\n- `birth_date` (date): Valid date format (YYYY-MM-DD)\n\n**Optional Fields:**\n- `email` (string): Valid email format, max 255 characters\n- `address` (string): Max 255 characters\n\n**Note:** The creator (vendor or authenticated customer) is automatically set based on the authenticated user."
-          },
-          "response": []
-        },
-        {
-          "name": "Show Customer",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "customers",
-                "{{customerId}}"
-              ]
-            },
-            "description": "Fetch a single customer resource by ID.\n\n**Response includes:**\n- Customer ID\n- National code\n- Mobile number\n- First and last name (Persian)\n- Birth date\n- Email (if provided)\n- Address (if provided)\n- Timestamps"
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Credit Scores",
-      "description": "Endpoints for requesting and retrieving customer credit scores",
-      "item": [
-        {
-          "name": "Request Credit Score",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}/credit-scores",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "customers",
-                "{{customerId}}",
-                "credit-scores"
-              ]
-            },
-            "description": "Trigger the credit scoring engine for the specified customer. Generates a new credit score initiated by the vendor.\n\n**Important:**\n- No request body is required\n- If a recent score exists, future optimization may return it instead of creating a new record\n- The response returns the newly created score\n"
-          },
-          "response": []
-        },
-        {
-          "name": "Get Latest Credit Score",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "description": "Request JSON response"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/vendors/{{vendorSlug}}/customers/{{customerId}}/credit-scores",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "vendors",
-                "{{vendorSlug}}",
-                "customers",
-                "{{customerId}}",
-                "credit-scores"
-              ]
-            },
-            "description": "Fetch the most recent credit score that belongs to the given customer. Response is sorted by `issued_on` and returns the latest record.\n\n**Response includes:**\n- Score metadata (ID, issued date, status, overall score)\n- Nested customer summary (if loaded)\n- Timestamps"
+            "description": "Process verification endpoint. This is a public endpoint used for verification processing."
           },
           "response": []
         }

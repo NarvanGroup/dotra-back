@@ -18,7 +18,7 @@ class CollateralForm
                 Select::make('application_id')
                     ->relationship('application', 'id')
                     ->getOptionLabelFromRecordUsing(fn(Application $record
-                    ) => "{$record->customer->first_name} {$record->customer->last_name} - ".number_format($record->total_amount)." IRR")
+                    ) => "{$record->customer->first_name} {$record->customer->last_name} - ".number_format($record->principal_amount ?? $record->total_payable_amount ?? 0)." IRR")
                     ->searchable()
                     ->preload()
                     ->required()

@@ -22,13 +22,15 @@ return new class extends Migration
             $table->foreignUuid('credit_score_id')
                 ->constrained('credit_scores', 'id')
                 ->restrictOnDelete();
-            $table->unsignedBigInteger('total_amount')->nullable();
+            $table->unsignedBigInteger('principal_amount')->nullable();
+            $table->unsignedBigInteger('down_payment_amount')->nullable();
+            $table->unsignedBigInteger('total_payable_amount')->nullable();
             $table->unsignedSmallInteger('number_of_installments')->nullable();
             $table->decimal('interest_rate', 5, 2)->nullable();
             $table->unsignedBigInteger('suggested_total_amount')->nullable();
             $table->unsignedSmallInteger('suggested_number_of_installments')->nullable();
             $table->decimal('suggested_interest_rate', 5, 2)->nullable();
-            $table->string('status')->default('terms-suggested')->index();
+            $table->string('status')->index();
             $table->softDeletes();
             $table->timestamps();
         });

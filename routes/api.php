@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Vendor\CollateralController;
 use App\Http\Controllers\Api\V1\Vendor\CreditScoreController;
 use App\Http\Controllers\Api\V1\Vendor\CustomerController;
 use App\Http\Controllers\Api\V1\Vendor\VendorController;
+use App\Http\Controllers\Api\V1\Customer\ContractController;
 use App\Http\Middleware\PreventMultipleLogins;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function (): void {
     Route::get('/process', [VerificationController::class, 'process']);
 
-// Public Routes - Send OTP
+    // Public Routes - Send OTP
     Route::middleware(['throttle:60,60'])->group(function () {
         Route::post('customers/sendOtp', [CustomerAuthenticationController::class, 'sendOtp']);
         Route::post('customers/signup', [CustomerAuthenticationController::class, 'register']);
@@ -23,19 +24,19 @@ Route::prefix('v1')->group(function (): void {
         Route::post('vendors/register', [VendorAuthenticationController::class, 'register']);
     });
 
-// Customer Authentication Routes
+    // Customer Authentication Routes
     Route::prefix('customers')->controller(CustomerAuthenticationController::class)->middleware(PreventMultipleLogins::class)->group(function () {
         Route::post('loginOtp', 'loginOtp');
         Route::post('loginPassword', 'loginPassword');
     });
 
-// Vendor Authentication Routes
+    // Vendor Authentication Routes
     Route::prefix('vendors')->controller(VendorAuthenticationController::class)->middleware(PreventMultipleLogins::class)->group(function () {
         Route::post('loginOtp', 'loginOtp');
         Route::post('loginPassword', 'loginPassword');
     });
 
-// Authenticated User Routes
+    // Authenticated User Routes
     Route::middleware('auth:sanctum')->group(function () {
         // Customer Profile
         Route::prefix('customers')->group(function () {
@@ -46,8 +47,15 @@ Route::prefix('v1')->group(function (): void {
         Route::prefix('vendors')->group(function () {
             Route::post('logout', [VendorAuthenticationController::class, 'logout']);
         });
-
     });
+
+    Route::prefix('customers')
+        ->group(function () {
+            Route::apiResource('contracts', ContractController::class)
+                ->names('customers.contracts')
+                ->only(['show', 'update'])
+                ->middleware('throttle:60,60');
+        });
 
 
     Route::prefix('vendors/{vendor:slug}')->scopeBindings()->middleware('auth:sanctum')->group(function (): void {
